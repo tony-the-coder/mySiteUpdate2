@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load django_vite %}
+
+{% block content %}
+  <div id="react-contact-form-root"></div>
+{% endblock %}
+
+{% block extra_js %}
+    {% vite_react_refresh %}
+  {% vite_asset 'src/main.tsx' %}
+{% endblock %}
