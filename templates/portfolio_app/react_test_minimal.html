@@ -3,4 +3,4 @@ Test{% endblock title %} {% block content %}
 <h1>React Template</h1>
 <div id="root"></div>
 {% endblock content %} {% block extra_js %} {{ block.super }}
-{%vite_react_refresh %} {% vite_asset 'src/main.tsx' %} {% endblock extra_js %}
+{%vite_react_refresh %} {% vite_asset 'main.tsx' %} {% endblock extra_js %}

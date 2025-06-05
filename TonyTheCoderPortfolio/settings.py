@@ -14,6 +14,7 @@ SECRET_KEY = os.environ.get(
     "DJANGO_SECRET_KEY", "fallback-insecure-key-for-dev-portfolio"
 )
 DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
+print(f"DJANGO DEBUG IS: {DEBUG}")
 
 ALLOWED_HOSTS = []  # Add your domain names here for production
 
@@ -74,17 +75,11 @@ DATABASES = {
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
     },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 # Internationalization
@@ -94,18 +89,16 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = "/static/"
+STATIC_URL = "/static/"  # This remains important
 
 # Directories where Django will look for static files additionally to app's 'static/' dirs
 STATICFILES_DIRS = [
-    BASE_DIR / "assets",  # Vite will build into a 'vite' subfolder here
+    BASE_DIR
+    / "assets",  # Vite will build into a 'vite' subfolder here for production collection
 ]
 
 # This is where `collectstatic` will gather all static files for deployment.
-# Vite's built assets from `assets/vite/` will be copied here.
-STATIC_ROOT = (
-    BASE_DIR / "staticfiles_collected"
-)  # Changed from "static/" to avoid conflict if you have a root static folder
+STATIC_ROOT = BASE_DIR / "staticfiles_collected"
 
 # Media files (User-uploaded content)
 MEDIA_URL = "/media/"
@@ -115,35 +108,43 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # --- Authentication Settings ---
 LOGIN_URL = "/accounts/login/"
-LOGIN_REDIRECT_URL = "/"  # Or 'portfolio_app:home'
-LOGOUT_REDIRECT_URL = "/"  # Or 'portfolio_app:home'
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
 
 # --- Django-Vite Settings ---
 DJANGO_VITE_DEV_MODE = (
     DEBUG  # Enables Vite HMR and dev server proxying if DEBUG is True
 )
 
-# Path where Vite generates assets (relative to BASE_DIR or absolute)
-# This should match your vite.config.ts build.outDir
+# Path where Vite generates assets to (relative to BASE_DIR or absolute) for `collectstatic_vite`
 DJANGO_VITE_ASSETS_PATH = BASE_DIR / "assets" / "vite"
 
-# Optional: If your manifest isn't named "manifest.json" or is in a different location
-# relative to DJANGO_VITE_ASSETS_PATH. Default is "manifest.json" within DJANGO_VITE_ASSETS_PATH.
-# DJANGO_VITE_MANIFEST_PATH = DJANGO_VITE_ASSETS_PATH / "manifest.json" # This is the default behavior
+# Root directory of your Vite project (where package.json and vite.config.js are)
+DJANGO_VITE_APP_DIR = BASE_DIR / "reactland"
+print(f"DJANGO_VITE_APP_DIR IS SET TO: '{DJANGO_VITE_APP_DIR}'")
 
-# --- NEW/MODIFIED FOR DEVELOPMENT PATHING ---
+# Vite Dev Server connection settings
+DJANGO_VITE_DEV_SERVER_HOST = "localhost"
+DJANGO_VITE_DEV_SERVER_PORT = 5173
+
 if DEBUG:
-    DJANGO_VITE_DEV_SERVER_HOST = "localhost"  # Default
-    DJANGO_VITE_DEV_SERVER_PORT = 5173  # Default
-    # This tells django-vite to NOT prepend any path segment like /static/
-    # when generating URLs for the Vite dev server.
-    # It makes the generated URL like http://localhost:5173/asset.js
-    # instead of http://localhost:5173/static/asset.js
-    DJANGO_VITE_STATIC_URL_PREFIX = ""
-# --- END NEW/MODIFIED ---
+    # Workaround: Make Django-Vite prepend /static/ to match Vite dev server base if Vite is also configured to serve from /static/
+    DJANGO_VITE_STATIC_URL_PREFIX = "/static/"
+    print(
+        f"DJANGO_VITE_STATIC_URL_PREFIX IS SET TO: '{DJANGO_VITE_STATIC_URL_PREFIX}' (Vite dev workaround)"
+    )
+else:
+    # For production, assets are served from a subfolder of STATIC_URL (e.g., /static/vite/)
+    # This prefix should match the `base` in your Vite config's production build.
+    DJANGO_VITE_STATIC_URL_PREFIX = (
+        "vite/"  # Assuming Vite's `build.base` is `/static/vite/`
+    )
+    print(
+        f"DJANGO_VITE_STATIC_URL_PREFIX IS SET TO: '{DJANGO_VITE_STATIC_URL_PREFIX}' (Production)"
+    )
+
 
 # --- CKEditor 5 Settings ---
-# (Your CKEditor settings would go here if you had them from previous discussions)
 # Example (ensure you have these configurations if you use them in forms.py):
 # CKEDITOR_5_CONFIGS = {
 # 'default': {
@@ -155,4 +156,3 @@ if DEBUG:
 #         'height': 150,
 # },
 # }
-# Add 'django_ckeditor_5.fields.CKEditor5Field' where you want to use it in models.

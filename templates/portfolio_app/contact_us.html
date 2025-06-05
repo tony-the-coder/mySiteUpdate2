@@ -1,10 +1,21 @@
-{% extends "base.html" %} {% load django_vite %} {% block title %}Contact Us -
-Tony the Coder{% endblock title %} {% block meta_description %}Get in touch with
-Tony the Coder to discuss projects, collaborations, or just to say hi!{%
-endblock meta_description %} {% block breadcrumbs_block %} {% if breadcrumbs %}
-{% include 'partials/_breadcrumbs.html' with breadcrumbs=breadcrumbs %} {% endif
-%} {% endblock breadcrumbs_block %} {% block content %}
+{% extends "base.html" %} 
+{% load django_vite %} 
+{% block title %}Contact Us -
+Tony the Coder
+{% endblock title %} 
+{% block meta_description %}
+Get in touch with Tony the Coder to discuss projects, collaborations, or just to say hi!
+{%endblock meta_description %} 
+{% block breadcrumbs_block %} 
+{% if breadcrumbs %} 
+{% include 'partials/_breadcrumbs.html' with breadcrumbs=breadcrumbs %} 
+{% endif %} 
+{% endblock breadcrumbs_block %} 
+{% block content %}
 <div id="react-contact-form-root"></div>
-{% endblock content %} {% block extra_js %} {{ block.super }} {%
-vite_react_refresh %} {# Corrected path relative to Vite's `root: "src"` config
-#} {% vite_asset 'main.tsx' %} {% endblock extra_js %}
+{% endblock content %} 
+{% block extra_js %} 
+{{ block.super }}
+{%vite_react_refresh %} 
+{% vite_asset 'main.tsx' %} 
+{% endblock extra_js %}
