@@ -93,8 +93,8 @@ STATIC_URL = "/static/"  # This remains important
 
 # Directories where Django will look for static files additionally to app's 'static/' dirs
 STATICFILES_DIRS = [
-    BASE_DIR
-    / "assets",  # Vite will build into a 'vite' subfolder here for production collection
+    BASE_DIR / "assets",
+    BASE_DIR / "static",   # Vite will build into a 'vite' subfolder here for production collection
 ]
 
 # This is where `collectstatic` will gather all static files for deployment.
