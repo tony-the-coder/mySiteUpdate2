@@ -1,6 +1,6 @@
 /* static/src/input.css */
 
-@import "../../node_modules/tailwindcss/dist/lib.d.mts"; /* This MUST be at the top */
+@import "tailwindcss";
 
 @theme {
   /* Font Families */
