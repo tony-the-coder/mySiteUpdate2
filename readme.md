@@ -1,18 +1,18 @@
-# Lehman Custom Construction - Django Web Application
+# Home of Tony the Coder - Django Web Application
 
 ## Project Overview
 
-This project is a custom web application built for Lehman Custom Construction, a high-end custom home builder. It serves as both a public-facing website to showcase their work and attract clients, and an internal portal system for staff to manage project-related information and customer interactions.
+This project is a custom web application built with Django. It serves as both a public-facing website to showcase projects and a comprehensive internal portal system for staff to manage project-related information and customer interactions.
 
-The goal was to create a professional online presence reflecting the quality of Lehman's work and provide tools to streamline internal workflows, with planned integration for reading key financial data from QuickBooks Online.
+The goal was to create a professional online presence and provide tools to streamline internal workflows, with planned integration for reading key financial data from QuickBooks Online (though this can be adapted or removed).
 
-**Note:** This repository reflects the state of development as of [Insert Date, e.g., May 2, 2025]. The QuickBooks Online API integration for reading financial data is planned but not yet implemented; current financial displays use placeholder data from the local database.
+**Note:** This repository reflects the state of development as of {{ CURRENT_DATE }}. The QuickBooks Online API integration for reading financial data is planned but not yet implemented; current financial displays use placeholder data from the local database. This project can serve as a robust template for similar business needs.
 
 ## Key Features (Implemented)
 
 ### Public Website:
-* **Homepage:** Introduces the company and showcases testimonials.
-* **About Us:** Placeholder page for company information.
+* **Homepage:** Introduces the entity/portfolio and showcases testimonials.
+* **About Us:** Placeholder page for company/personal information.
 * **Portfolio:**
     * Displays completed projects in a responsive grid layout.
     * Uses featured images with consistent aspect ratios via Tailwind CSS.
@@ -60,7 +60,7 @@ The goal was to create a professional online presence reflecting the quality of 
 1.  **Clone the repository:**
     ```bash
     git clone [your-repo-url]
-    cd Lehman-Django
+    cd [your-project-directory-name]
     ```
 2.  **Create and activate a virtual environment:**
     ```bash
@@ -78,7 +78,7 @@ The goal was to create a professional online presence reflecting the quality of 
     ```dotenv
     DJANGO_SECRET_KEY='your_strong_secret_key_here'
     DJANGO_DEBUG=True
-    # Add QBO Sandbox keys if testing API connection setup
+    # Add QBO Sandbox keys if testing API connection setup (optional)
     # QBO_CLIENT_ID='YOUR_SANDBOX_CLIENT_ID'
     # QBO_CLIENT_SECRET='YOUR_SANDBOX_CLIENT_SECRET'
     # QBO_SANDBOX_REDIRECT_URI='http://localhost:8000/qbo/callback/'
@@ -93,7 +93,13 @@ The goal was to create a professional online presence reflecting the quality of 
     ```bash
     python manage.py createsuperuser
     ```
-7.  **Run Tailwind CSS Build (if needed):** Ensure your Tailwind `output.css` is generated/updated based on the classes used in templates. If needed, run the build command (e.g., `npx tailwindcss -i ... -o ...`). Running with `--watch` in a separate terminal during development is recommended.
+7.  **Run Tailwind CSS Build (if needed):** Ensure your Tailwind `output.css` is generated/updated based on the classes used in templates. If using the provided `package.json` scripts:
+    ```bash
+    npm install # If you haven't already
+    npm run build:css # For a one-time build
+    # or
+    npm run watch:css # To watch for changes during development (run in a separate terminal)
+    ```
 8.  **Run Development Server:**
     ```bash
     python manage.py runserver
@@ -106,18 +112,18 @@ The goal was to create a professional online presence reflecting the quality of 
 ## Current Status & Known Issues
 
 * Core public site structure and Staff Portal CRUD for Portfolio Items are functional using the local database.
-* **QuickBooks Online data synchronization is not yet implemented.** Financial figures displayed (e.g., Project Budget/Actuals) are placeholders based on local `Project`, `CostItem`, and `Expense` models.
-* Staff portal requires "Add another" JavaScript for dynamically adding more than the initial gallery image slots.
-* Styling is functional but requires refinement based on final design decisions.
+* **QuickBooks Online data synchronization is not yet implemented.** Financial figures displayed (e.g., Project Budget/Actuals) are placeholders based on local `Project`, `CostItem`, and `Expense` models. This feature can be adapted or removed based on new project requirements.
+* Staff portal may require "Add another" JavaScript functionality for dynamically adding more than the initial gallery image slots if not using Django admin's default capabilities for inline formsets.
+* Styling is functional but may require refinement based on final design decisions for its new purpose.
 
-## Future Plans
+## Future Plans (Adaptable for New Project Goals)
 
-* Implement QBO API integration (OAuth2) to read Customers, Estimates (populating `Project.total_budget`, `CostItem`s), and Expenses (populating `Expense` model).
-* Build out the secure Customer Portal section.
-* Implement role-based login redirects (Staff vs. Customer).
+* Implement QBO API integration (OAuth2) if financial data linking is still relevant.
+* Build out the secure Customer Portal section (if applicable).
+* Implement role-based login redirects (Staff vs. Customer, or other roles).
 * Add video walkthrough embedding to Portfolio Detail pages.
-* Integrate dynamic "Add another" functionality for inline gallery images in the Staff Portal form.
-* Implement a Rich Text Editor for the Blog `content` field.
-* Refine overall site styling and responsiveness based on final designs.
+* Enhance dynamic "Add another" functionality for inline gallery images in the Staff Portal form if needed.
+* Implement a Rich Text Editor for the Blog `content` field (CKEditor is already used for Portfolio, can be extended).
+* Refine overall site styling and responsiveness.
 * Add Portfolio filtering by Category/Style.
-* Deploy to production environment (Hostinger VPS) using Gunicorn/Nginx and PostgreSQL.
+* Deploy to a production environment (e.g., Hostinger VPS) using Gunicorn/Nginx and PostgreSQL.
