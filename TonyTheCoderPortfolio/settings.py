@@ -124,12 +124,23 @@ DJANGO_VITE_DEV_MODE = (
 )
 
 # Path where Vite generates assets (relative to BASE_DIR or absolute)
-# This should match your vite.config.js build.outDir
+# This should match your vite.config.ts build.outDir
 DJANGO_VITE_ASSETS_PATH = BASE_DIR / "assets" / "vite"
 
 # Optional: If your manifest isn't named "manifest.json" or is in a different location
 # relative to DJANGO_VITE_ASSETS_PATH. Default is "manifest.json" within DJANGO_VITE_ASSETS_PATH.
 # DJANGO_VITE_MANIFEST_PATH = DJANGO_VITE_ASSETS_PATH / "manifest.json" # This is the default behavior
+
+# --- NEW/MODIFIED FOR DEVELOPMENT PATHING ---
+if DEBUG:
+    DJANGO_VITE_DEV_SERVER_HOST = "localhost"  # Default
+    DJANGO_VITE_DEV_SERVER_PORT = 5173  # Default
+    # This tells django-vite to NOT prepend any path segment like /static/
+    # when generating URLs for the Vite dev server.
+    # It makes the generated URL like http://localhost:5173/asset.js
+    # instead of http://localhost:5173/static/asset.js
+    DJANGO_VITE_STATIC_URL_PREFIX = ""
+# --- END NEW/MODIFIED ---
 
 # --- CKEditor 5 Settings ---
 # (Your CKEditor settings would go here if you had them from previous discussions)
@@ -145,8 +156,3 @@ DJANGO_VITE_ASSETS_PATH = BASE_DIR / "assets" / "vite"
 # },
 # }
 # Add 'django_ckeditor_5.fields.CKEditor5Field' where you want to use it in models.
-
-
-# Ensure Vite's dev server is running on the default port (5173) or configure:
-# DJANGO_VITE_DEV_SERVER_HOST = "localhost"
-# DJANGO_VITE_DEV_SERVER_PORT = 5173

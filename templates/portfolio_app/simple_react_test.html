@@ -4,13 +4,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ultra Simple React Test</title>
-    {% vite_hmr_client %} {# From your base.html, good for dev #}
+    <title>Ultra Simple React Test - Execution Test</title>
+    {% vite_hmr_client %}
   </head>
   <body>
-    <h1>Ultra Simple Django Page</h1>
-    <div id="simple-react-root">Target Div Here</div>
+    <h1>Ultra Simple Django Page - Execution Test</h1>
+    <div id="simple-react-root">Initial content in div.</div>
 
-    {% vite_react_refresh %} {% vite_asset 'src/main.tsx' %}
+    {% vite_react_refresh %} {# Using the path that loads with 200 OK for you #}
+    {% vite_asset 'main.tsx' %}
   </body>
 </html>
