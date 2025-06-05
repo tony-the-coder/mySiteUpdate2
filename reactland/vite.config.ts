@@ -1,26 +1,29 @@
 // reactland/vite.config.ts
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react' // This should come from reactland/node_modules
-import tailwindcss from '@tailwindcss/vite' // This should come from reactland/node_modules
+import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 import path from 'path';
 
 export default defineConfig(({ mode }) => {
   const isProduction = mode === 'production';
   return {
-    root: "src",
-    plugins: [
-      react(), // Vite's React plugin
-      tailwindcss(), // Tailwind CSS Vite plugin
+    root: "src", // existing
+    plugins: [   // existing
+      react(),
+      tailwindcss(),
     ],
-    base: isProduction ? "/static/vite/" : "/static/", // From our previous workaround
-    resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'src'), // Adjust if your code is in 'reactland'
+    optimizeDeps: {  // <--- Add this section
+      include: ['clsx'],
+    },              // <--- End of new section
+    base: isProduction ? "/static/vite/" : "/static/", // existing
+    resolve: { // existing
+      alias: {
+        '@': path.resolve(__dirname, 'src'),
+      },
     },
-    },
-    build: {
+    build: { // existing
       manifest: "manifest.json",
-      outDir: path.resolve(__dirname, "..", "assets", "vite"), // Corrected path from previous context
+      outDir: path.resolve(__dirname, "..", "assets", "vite"),
       rollupOptions: {
         input: {
           main: path.resolve(__dirname, "src", "main.tsx"),
