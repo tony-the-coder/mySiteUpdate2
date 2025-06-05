@@ -13,7 +13,11 @@ export default defineConfig(({ mode }) => {
       tailwindcss(), // Tailwind CSS Vite plugin
     ],
     base: isProduction ? "/static/vite/" : "/static/", // From our previous workaround
-    // ... your existing build and other configurations ...
+    resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'), // Adjust if your code is in 'reactland'
+    },
+    },
     build: {
       manifest: "manifest.json",
       outDir: path.resolve(__dirname, "..", "assets", "vite"), // Corrected path from previous context
