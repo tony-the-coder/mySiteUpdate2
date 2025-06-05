@@ -1,0 +1,16 @@
+{% load django_vite %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ultra Simple React Test</title>
+    {% vite_hmr_client %} {# From your base.html, good for dev #}
+  </head>
+  <body>
+    <h1>Ultra Simple Django Page</h1>
+    <div id="simple-react-root">Target Div Here</div>
+
+    {% vite_react_refresh %} {% vite_asset 'src/main.tsx' %}
+  </body>
+</html>

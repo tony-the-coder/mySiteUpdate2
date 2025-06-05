@@ -70,6 +70,14 @@ def is_office_staff(user):  # For your portfolio, this might just become `user.i
     )
 
 
+def simple_react_test_view(request):
+    context = {
+        "page_title": "Simple React Test",
+        "is_staff_portal": False,  # Assuming it's public
+    }
+    return render(request, "portfolio_app/simple_react_test.html", context)
+
+
 # --- Public Site Views ---
 def home(request):
     published_status = getattr(BlogPost, "PUBLISHED", "PUBLISHED")
