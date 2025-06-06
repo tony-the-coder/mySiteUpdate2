@@ -4,8 +4,10 @@
 {% block title %}Portfolio - Tony the Coder{% endblock title %}
 
 {% block hero_section %}
+  {% include 'partials/_aurora_hero.html' %}
 {# The background color is now a darker charcoal for better contrast #}
 <section class="bg-brand-charcoal-darker text-white py-20 md:py-28">
+    
     <div class="container mx-auto text-center px-6">
         {# ADDED ! to text-white to make it override the base h1 style #}
         <h1 class="text-4xl md:text-6xl font-bold font-heading animate-fade-in-down !text-white">
@@ -14,10 +16,18 @@
         <p class="mt-4 text-lg md:text-xl max-w-2xl mx-auto text-gray-300 animate-fade-in-up animation-delay-300">
             A selection of projects that showcase my skills in web development, from backend logic to frontend design.
         </p>
+        
     </div>
+  
 </section>
 {% endblock hero_section %}
 
+{% block breadcrumbs_block %}
+    {% if breadcrumbs %}
+       
+        {% include 'partials/_breadcrumbs.html' with breadcrumbs=breadcrumbs %}
+    {% endif %}
+{% endblock breadcrumbs_block %}
 
 {% block content %}
 <div id="react-portfolio-showcase-root" class="py-12">

@@ -9,7 +9,8 @@
 {% endblock hero_section %}
 
 {% block content %}
-    <section class="py-16 lg:py-24 bg-brand-white">
+    {# My Journey & Expertise Section #}
+    <section class="py-16 lg:py-24 bg-brand-white" data-aos="fade-up" data-aos-duration="700">
         <div class="container mx-auto px-6 lg:px-8 max-w-4xl text-center">
             <h2 class="section-heading">My Journey & Expertise</h2>
             <div class="mt-8 text-lg text-gray-700 leading-relaxed content-prose">
@@ -19,8 +20,13 @@
                 <p>I am passionate about continuous learning and constantly strive to keep up with the latest advancements in technology, particularly in areas like Artificial Intelligence (AI), cybersecurity, and innovative software development practices.</p>
                 <p>While I have spent several years learning development on my own and building various projects, my primary professional background has been in Quality Assurance (QA) and accounting, providing me with a unique perspective on building robust and reliable systems.</p>
             </div>
+        </div>
+    </section>
 
-            <h3 class="section-heading mt-16 mb-8">My Certifications & Learning</h3>
+    {# My Certifications & Learning Section #}
+    <section class="py-16 lg:py-24 bg-brand-gray-light" data-aos="fade-up" data-aos-delay="100" data-aos-duration="700">
+        <div class="container mx-auto px-6 lg:px-8 max-w-4xl text-center">
+            <h3 class="section-heading mt-0 mb-8">My Certifications & Learning</h3> {# Removed mt-16 as section has its own padding #}
             <div class="flex flex-wrap justify-center items-center gap-6">
                 {# Unique Credly Badges, sorted alphabetically by ID #}
                 <div class="badge-item">
@@ -86,4 +92,4 @@
             </div>
         </div>
     </section>
-{% endblock %}
+{% endblock content %}
