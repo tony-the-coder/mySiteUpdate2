@@ -114,18 +114,18 @@ def home(request):
     return render(request, "portfolio_app/home.html", context)
 
 
-def about_us(request):  # Will be "About Me"
-    context = {
-        "page_title": "About Tony the Coder",
-        "meta_description": "Learn more about Tony the Coder, a developer passionate about building innovative solutions and exploring new technologies.",
-        "breadcrumbs": [
-            {"name": "Home", "url": reverse("portfolio_app:home")},
-            {"name": "About Me", "is_active": True},
-        ],
-        "is_staff_portal": False,
-    }
-    return render(request, "portfolio_app/about_us.html", context)
 
+# In portfolio_app/views.py
+
+def about_us(request):
+    """
+    Renders the about us page.
+    """
+    context = {
+        'hero_title': "About Me",
+        'hero_subtitle': "Developer, creator, and lifelong learner.",
+    }
+    return render(request, 'portfolio_app/about_us.html', context)
 
 def contact_us(request):
     # This view will initially serve the page for the React contact form.
