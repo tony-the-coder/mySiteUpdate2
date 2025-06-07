@@ -38,24 +38,23 @@ export function PortfolioShowcasePage() {
   }
 
   return (
-    // Set a dark background for the entire component section
+    // This single div now controls the background for the whole page section.
     <div className="flex flex-col overflow-hidden ">
 
-      {/* The ContainerScroll is now a proper hero with better text */}
+      {/* The ContainerScroll is the hero with new, descriptive text */}
       <ContainerScroll
         titleComponent={
           <>
-            {/* THIS IS THE NEW HERO TEXT */}
             <h1 className="text-4xl font-semibold text-white mb-8">
               From Concept to Creation<br />
-              <span className="text-4xl md:text-6xl font-bold mt-1 leading-none">
+              <span className="text-4xl md:text-6xl font-bold mt-1 leading-none text-brand-gold">
                 A Showcase of My Work
               </span>
             </h1>
           </>
         }
       >
-        {/* The hero still shows the featured project, but it's not clickable to avoid redundancy */}
+        {/* The hero still features the most recent project image */}
         <img
           src={heroProject.imageUrl || ''}
           alt={`${heroProject.title} preview`}
@@ -66,9 +65,8 @@ export function PortfolioShowcasePage() {
         />
       </ContainerScroll>
 
-      {/* The grid of all project pins */}
+      {/* The project grid section with its own heading */}
       <div className="p-4 md:p-10">
-        {/* THIS IS THE NEW HEADING FOR THE PINS */}
         <h2 className="text-3xl font-bold text-center my-10 text-white">
           Explore My Projects
         </h2>

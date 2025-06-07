@@ -8,20 +8,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Lehman Custom Construction{% endblock title %}</title>
-    <meta name="description" content="{% block meta_description %}Lehman Custom Construction specializes in luxury custom homes, bringing your unique vision to life with unparalleled craftsmanship and attention to detail.{% endblock meta_description %}">
+    <title>{% block title %}Tony the Coder{% endblock title %}</title>
+    <meta name="description" content="{% block meta_description %}Welcome to the portfolio of Tony the Coder. Discover projects in Python, Django, React, AI, and more.{% endblock meta_description %}">
 
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-<link rel="stylesheet" href="{% static 'src/output.css' %}">
-    {% if request.path|slice:":6" == "/admin" %}
-    <link rel="stylesheet" href="{% static 'css/admin_override.css' %}">
-    {% endif %}
+    <link rel="stylesheet" href="{% static 'src/output.css' %}">
 
     <style>
         [x-cloak] { display: none !important; }
-        .content-below-public-nav { padding-top: 112px; }
+        /* This class is no longer needed as the new navbar is fixed and doesn't push content down */
+        /* .content-below-public-nav { padding-top: 112px; } */
     </style>
 
     {% block extra_head %}
@@ -34,13 +32,14 @@
         {% trans "Skip to main content" %}
     </a>
 
+    {# STEP 1: ADD THE ROOT DIV FOR THE REACT NAVBAR HERE #}
+    <div id="react-navbar-root"></div>
+
     <div id="page-container" class="flex flex-col min-h-screen">
-        <div id="public_navbar_container" class="{% if is_staff_portal %}hidden{% endif %}">
-            {% block public_navbar_content %}
-                {% include 'partials/_navbar.html' %}
-            {% endblock public_navbar_content %}
-        </div>
-        <div id="content-wrap" class="flex-grow {% if not is_staff_portal %}content-below-public-nav{% else %}pt-0{% endif %}">
+        {# STEP 2: THE OLD NAVBAR IS REMOVED FROM HERE #}
+
+        {# Add padding to the top of the content area to push it below the new fixed navbar #}
+        <div id="content-wrap" class="flex-grow pt-32">
             {% block hero_section %}{% endblock hero_section %}
             {% block breadcrumbs_block %}{% endblock breadcrumbs_block %}
             <main id="main-content">
@@ -54,16 +53,13 @@
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script>
       if (typeof AOS !== 'undefined') {
-        AOS.init({
-          once: true,
-          duration: 700,
-          easing: 'ease-in-out',
-          offset: 200 // Increased offset to trigger earlier, adjust as needed (try 200-300)
-        });
-      } else {
-        console.warn('AOS library not loaded, animations will not initialize.');
+        AOS.init({ once: true, duration: 700, easing: 'ease-in-out', offset: 200 });
       }
     </script>
-    {% block extra_js %}{% endblock %}
+
+    {% block extra_js %}
+        {# STEP 3: ADD THE VITE ASSET FOR THE NAVBAR ENTRY SCRIPT #}
+        {% vite_asset 'navbarEntry.tsx' %}
+    {% endblock %}
 </body>
 </html>

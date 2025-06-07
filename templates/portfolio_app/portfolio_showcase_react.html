@@ -3,8 +3,12 @@
 
 {% block title %}Portfolio - Tony the Coder{% endblock title %}
 
-{# This block now ONLY contains the root div for the React application. #}
-{# This makes it a true "hero" as it's the first thing in the content area. #}
+{# THIS IS THE FIX: This block finds the 'body_class' in base.html #}
+{# and replaces its content with our dark background class. #}
+{% block body_class %}bg-brand-charcoal-darker{% endblock %}
+
+
+{# The hero section now ONLY contains the root div for our React app. #}
 {% block hero_section %}
   <div id="react-portfolio-showcase-root">
     <p class="text-center p-16">Loading Projects...</p>
@@ -14,7 +18,7 @@
   {{ projects_json|json_script:"portfolio-projects-data" }}
 {% endblock hero_section %}
 
-{# These blocks are now empty because React is handling all of this page's content. #}
+{# These blocks are empty because React is handling all of this page's content. #}
 {% block breadcrumbs_block %}{% endblock breadcrumbs_block %}
 {% block content %}{% endblock content %}
 
