@@ -12,7 +12,7 @@ import React, { useRef, useState } from "react";
 
 
 interface NavbarProps {
-  children: React.ReactNode;
+  children: React.ReactNode | ((visible: boolean) => React.ReactNode);
   className?: string;
 }
 
@@ -29,6 +29,7 @@ interface NavItemsProps {
   }[];
   className?: string;
   onItemClick?: () => void;
+  visible?: boolean;
 }
 
 interface MobileNavProps {
@@ -68,17 +69,18 @@ export const Navbar = ({ children, className }: NavbarProps) => {
   return (
     <motion.div
       ref={ref}
-      // IMPORTANT: Change this to class of `fixed` if you want the navbar to be fixed
-      className={cn("fixed inset-x-0 top-20 z-40 w-full", className)}
+      className={cn("fixed inset-x-0 top-0 z-40 w-full", className)}
     >
-      {React.Children.map(children, (child) =>
-        React.isValidElement(child)
-          ? React.cloneElement(
-              child as React.ReactElement<{ visible?: boolean }>,
-              { visible },
-            )
-          : child,
-      )}
+      {typeof children === "function"
+        ? children(visible)
+        : React.Children.map(children, (child) =>
+            React.isValidElement(child)
+              ? React.cloneElement(
+                  child as React.ReactElement<{ visible?: boolean }>,
+                  { visible },
+                )
+              : child,
+          )}
     </motion.div>
   );
 };
@@ -113,14 +115,14 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
   );
 };
 
-export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
+export const NavItems = ({ items, className, onItemClick, visible }: NavItemsProps) => {
   const [hovered, setHovered] = useState<number | null>(null);
 
   return (
     <motion.div
       onMouseLeave={() => setHovered(null)}
       className={cn(
-        "absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-2 text-sm font-medium text-zinc-600 transition duration-200 hover:text-zinc-800 lg:flex lg:space-x-2",
+        "absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-2 text-sm font-medium transition duration-200 lg:flex lg:space-x-2",
         className,
       )}
     >
@@ -128,7 +130,12 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
         <a
           onMouseEnter={() => setHovered(idx)}
           onClick={onItemClick}
-          className="relative px-4 py-2 text-neutral-600 dark:text-neutral-300"
+          className={cn(
+              "relative px-4 py-2 transition-colors duration-300",
+              visible
+                ? "text-neutral-600 hover:text-black dark:text-neutral-300"
+                : "text-neutral-300 hover:text-white"
+            )}
           key={`link-${idx}`}
           href={item.link}
         >
@@ -230,19 +237,17 @@ export const MobileNavToggle = ({
   );
 };
 
-export const NavbarLogo = () => {
+export const NavbarLogo = ({ visible }: { visible?: boolean }) => {
   return (
     <a
-      href="#"
-      className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black"
+      href="/"
+      className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal"
     >
-      <img
-        src="https://assets.aceternity.com/logo-dark.png"
-        alt="logo"
-        width={30}
-        height={30}
-      />
-      <span className="font-medium text-black dark:text-white">Startup</span>
+      {/* Example logo image */}
+      {/* <img src="path/to/your/logo.png" alt="logo" width={30} height={30} /> */}
+      <span className={cn("font-medium transition-colors", visible ? "text-black dark:text-white" : "text-white dark:text-white")}>
+        Tony the Coder
+      </span>
     </a>
   );
 };
