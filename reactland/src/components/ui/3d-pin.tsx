@@ -3,7 +3,7 @@
               // For a pure Vite/React setup, it's often omitted.
 import React, { useState } from "react";
 import { motion } from "motion/react"; // Ensure 'motion' is installed in reactland, not 'framer-motion' for this import
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils.ts";
 
 export const PinContainer = ({
   children,

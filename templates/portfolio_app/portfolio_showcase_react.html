@@ -4,40 +4,40 @@
 {% block title %}Portfolio - Tony the Coder{% endblock title %}
 
 {% block hero_section %}
-  
-{# The background color is now a darker charcoal for better contrast #}
+{# This is your existing hero section. It can stay. #}
 <section class="bg-brand-charcoal-darker text-white py-20 md:py-28">
-    
     <div class="container mx-auto text-center px-6">
-        {# ADDED ! to text-white to make it override the base h1 style #}
         <h1 class="text-4xl md:text-6xl font-bold font-heading animate-fade-in-down !text-white">
             My Work
         </h1>
         <p class="mt-4 text-lg md:text-xl max-w-2xl mx-auto text-gray-300 animate-fade-in-up animation-delay-300">
             A selection of projects that showcase my skills in web development, from backend logic to frontend design.
         </p>
-        
     </div>
-  
 </section>
 {% endblock hero_section %}
 
 {% block breadcrumbs_block %}
     {% if breadcrumbs %}
-       
         {% include 'partials/_breadcrumbs.html' with breadcrumbs=breadcrumbs %}
     {% endif %}
 {% endblock breadcrumbs_block %}
 
 {% block content %}
-<div id="react-portfolio-showcase-root" class="py-12">
-    {# Your React component will render here #}
-</div>
-{% endblock content %}
+  {# This is the root div where our React component will be mounted. #}
+  <div id="react-portfolio-showcase-root" class="py-12">
+    {# React will render "Loading..." here if needed #}
+  </div>
 
+  {# --- THIS IS THE MISSING PIECE --- #}
+  {# This script tag securely passes the project data from the Django view into the page #}
+  {{ projects_json|json_script:"portfolio-projects-data" }}
+
+{% endblock content %}
 
 {% block extra_js %}
     {{ block.super }}
     {% vite_react_refresh %}
-    {% vite_asset 'main.tsx' %}
+    {# This correctly loads your dedicated entry script for this page. #}
+    {% vite_asset 'portfolioPageEntry.tsx' %}
 {% endblock extra_js %}
