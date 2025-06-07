@@ -2,9 +2,9 @@
 {% load static %}
 {% load humanize %}
 {% load math_filters %}
-{% load random_filters %}
+{% load random_filters %} {# Assuming you have this custom filter for random percentages #}
 
-{% block title %}Home - Tony the Coder{% endblock %}
+{% block title %}Home - Tony the Coder | Developer Portfolio{% endblock %}
 
 {% block hero_section %}
 <section
@@ -22,14 +22,16 @@
         x-data="{
             text: 'Tony the Coder',
             displayedText: '',
+            initialized: false, // Flag to prevent re-initiation if component re-renders
             init() {
-                if (this.text) {
+                if (!this.initialized) {
                     let i = 0;
                     const interval = setInterval(() => {
                         this.displayedText += this.text[i];
                         i++;
                         if (i >= this.text.length) {
                             clearInterval(interval);
+                            this.initialized = true; // Mark as initialized
                         }
                     }, 80);
                 }
@@ -37,7 +39,8 @@
         }"
         class="relative z-10 text-center px-6">
         <h1 class="font-heading text-4xl md:text-6xl lg:text-7xl font-semibold mb-4 leading-tight">
-            <span x-text="displayedText" class="inline-block"></span>
+            <span class="sr-only">Tony the Coder</span> {# Hidden for screen readers, but present for SEO #}
+            <span x-text="displayedText" class="inline-block" aria-hidden="true"></span>
             <span class="inline-block border-r-2 border-brand-gold animate-caret-blink" aria-hidden="true"></span>
         </h1>
         <p class="font-body text-lg md:text-xl lg:text-2xl max-w-2xl mx-auto mb-8 opacity-0 animate-fade-in-up animation-delay-[1500ms]">
