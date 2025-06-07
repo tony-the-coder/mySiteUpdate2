@@ -238,11 +238,12 @@ def blog_category_list(request, slug):
 
 def portfolio_showcase_react(request):
     """
-    Renders the portfolio page and passes project data as JSON
-    to the template for the React component to use.
+    Renders the portfolio page and passes project data as a Python list
+    to the template, letting the |json_script filter handle the conversion.
     """
     projects = PortfolioProject.objects.filter(is_active=True).order_by("order", "-created_at")
 
+    # Prepare the data as a simple Python list of dictionaries
     projects_data = []
     for project in projects:
         projects_data.append({
@@ -255,12 +256,12 @@ def portfolio_showcase_react(request):
 
     context = {
         "page_title": "My Coding Portfolio - Tony the Coder",
-        "meta_description": "A showcase of web development, Python, Django, React, and AI projects by Tony the Coder.",
         "breadcrumbs": [
             {"name": "Home", "url": reverse("portfolio_app:home")},
             {"name": "Portfolio", "is_active": True},
         ],
-        "projects_json": json.dumps(projects_data, cls=DjangoJSONEncoder)
+        # THE FIX: Pass the Python list directly, NOT a JSON string.
+        "projects_json": projects_data
     }
     return render(request, "portfolio_app/portfolio_showcase_react.html", context)
 
