@@ -3,7 +3,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css'; // Global styles
-// CORRECTED PATH: The import now looks inside the 'pages' folder.
 import { PortfolioShowcasePage } from './pages/PortfolioShowcasePage.tsx';
 
 // Find the specific root element in the portfolio template

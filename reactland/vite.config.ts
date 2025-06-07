@@ -7,26 +7,27 @@ import path from 'path';
 export default defineConfig(({ mode }) => {
   const isProduction = mode === 'production';
   return {
-    root: "src", // existing
-    plugins: [   // existing
+    root: "src",
+    plugins: [
       react(),
       tailwindcss(),
     ],
-    optimizeDeps: {  // <--- Add this section
-      include: ['clsx'],
-    },              // <--- End of new section
-    base: isProduction ? "/static/vite/" : "/static/", // existing
-    resolve: { // existing
+    base: isProduction ? "/static/vite/" : "/static/",
+    resolve: {
       alias: {
         '@': path.resolve(__dirname, 'src'),
       },
     },
-    build: { // existing
+    build: {
       manifest: "manifest.json",
       outDir: path.resolve(__dirname, "..", "assets", "vite"),
       rollupOptions: {
+        // CORRECTED: All entry points are listed here
         input: {
           main: path.resolve(__dirname, "src", "main.tsx"),
+          navbarEntry: path.resolve(__dirname, "src", "navbarEntry.tsx"),
+          portfolioPageEntry: path.resolve(__dirname, "src", "portfolioPageEntry.tsx"),
+          aboutPageEntry: path.resolve(__dirname, "src", "aboutPageEntry.tsx"),
         }
       }
     }

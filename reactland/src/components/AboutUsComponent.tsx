@@ -10,17 +10,7 @@ const AboutUsComponent: React.FC = () => {
         This section is now powered by React! We can add cool animations.
       </p>
 
-      {/* Example: Integrate an Aceternity UI component */}
-      {/*
-      <BackgroundBeams />
-      <div className="relative z-10 text-center">
-        <h3 className="text-2xl font-bold text-blue-800 mb-4">Animated Vision</h3>
-        <p className="text-gray-600">See our vision come to life with subtle background animations.</p>
-      </div>
-      */}
-
-      {/* More React-controlled content */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h3 className="font-bold text-xl mb-2">Innovation</h3>
           <p>We constantly strive for new and better solutions.</p>
