@@ -1,151 +1,140 @@
+// your_project_root/reactland/src/pages/contact_us/ContactUs.tsx
 import React, { useState } from 'react';
+import { SparklesCore } from '@/components/ui/sparkles'; // Import SparklesCore
+import { cn } from "@/lib/utils"; // Import cn utility (used for combining Tailwind classes)
 
-const ContactUsPage = () => { // Renamed to ContactUsPage for clarity if it's a full page component
+const ContactUs = () => {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<{ type: 'success' | 'error' | ''; message: string }>({ type: '', message: '' });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitStatus({ type: '', message: '' });
+    // This is your existing form submission logic
+    console.log("Form submitted:", form);
+    alert("Form submitted! (Check console for data)"); // For demonstration
 
-    // Simulate API call
-    // In a real app, you'd use fetch or axios here to POST to your Django API endpoint
-    // e.g., to `/api/contact-submit/`
-    try {
-      // const response = await fetch('/api/contact-submit/', { // Your actual API endpoint
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     // Add CSRF token if your API endpoint requires it
-      //     // 'X-CSRFToken': getCookie('csrftoken'), // You'd need a getCookie function
-      //   },
-      //   body: JSON.stringify(form),
-      // });
-      // const data = await response.json();
+    // In a real scenario, you'd send this to your Django API:
+    // Make sure you have a function to get the CSRF token if submitting to Django
+    // const getCsrfToken = () => {
+    //   // Implement logic to get CSRF token from meta tag or cookie
+    //   // Example for meta tag: document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    //   // This is crucial for Django POST requests.
+    //   return 'your-csrf-token-here';
+    // };
 
-      // MOCKUP: Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      const data = { status: 'success', message: 'Your message has been sent successfully! We will be in touch soon.' }; // Mock success
-      // const data = { status: 'error', message: 'Something went wrong. Please try again.' }; // Mock error
-
-      if (data.status === 'success') {
-        setSubmitStatus({ type: 'success', message: data.message });
-        setForm({ name: '', email: '', message: '' }); // Clear form
-      } else {
-        setSubmitStatus({ type: 'error', message: data.message || 'An unexpected error occurred.' });
-      }
-    } catch (error) {
-      setSubmitStatus({ type: 'error', message: 'Failed to send message. Please check your connection.' });
-    } finally {
-      setIsSubmitting(false);
-    }
+    // fetch('/api/contact-submit/', { // Use your Django API endpoint
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'X-CSRFToken': getCsrfToken(),
+    //   },
+    //   body: JSON.stringify(form),
+    // })
+    // .then(response => response.json())
+    // .then(data => {
+    //   if (data.status === 'success') {
+    //     alert(data.message);
+    //     setForm({ name: '', email: '', message: '' }); // Clear form on success
+    //   } else {
+    //     alert('Error: ' + JSON.stringify(data.errors)); // Display validation errors
+    //   }
+    // })
+    // .catch(error => console.error('Error submitting form:', error));
   };
 
-  // Common input field styling
-  const inputBaseClasses = "block w-full px-4 py-3 mt-1 text-base text-brand-charcoal placeholder-gray-500 bg-brand-white border border-brand-gray-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-gold focus:border-brand-gold transition-colors";
-
   return (
-    <div className="bg-brand-gray-light py-16 sm:py-24">
-      <div className="container mx-auto px-6 lg:px-8 max-w-2xl">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-brand-charcoal font-heading mb-4">
-            Get In Touch
-          </h2>
-          <p className="text-lg text-brand-gray-text font-body max-w-xl mx-auto">
-            Have a project in mind, a question, or just want to connect? I'd love to hear from you.
-          </p>
-        </div>
+    // This outer div now acts as the container for the Sparkles effect
+    // We adjust its height and background color to frame the form
+    <div className="relative w-full h-auto min-h-[600px] flex flex-col items-center justify-center overflow-hidden rounded-md bg-black">
+      {/* Gradients from SparklesDemo - these are decorative elements */}
+      <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
+      <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
+      <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
+      <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
 
-        <div className="bg-brand-white p-8 sm:p-10 md:p-12 rounded-lg shadow-xl">
-          <form onSubmit={handleSubmit} className="space-y-8">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-brand-charcoal font-body mb-1">
-                Your Name <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                className={inputBaseClasses}
-                value={form.name}
-                onChange={handleChange}
-                placeholder="e.g., Jane Doe"
-                disabled={isSubmitting}
-              />
-            </div>
+      {/* The SparklesCore component itself, positioned absolutely to cover the background */}
+      {/* particleDensity, minSize, maxSize, particleColor can be tweaked for desired effect */}
+      <SparklesCore
+        background="transparent" // Let the div's bg-black show through
+        minSize={0.4}
+        maxSize={1.2} // Slightly larger max size for more prominent sparkles
+        particleDensity={800} // Adjust density (lower for less, higher for more)
+        className="absolute w-full h-full inset-0 z-0" // Stretches to cover the parent div
+        particleColor="#FFFFFF" // White sparkles on dark background
+      />
 
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-brand-charcoal font-body mb-1">
-                Your Email <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                className={inputBaseClasses}
-                value={form.email}
-                onChange={handleChange}
-                placeholder="e.g., jane.doe@example.com"
-                disabled={isSubmitting}
-              />
-            </div>
+      {/* Radial Gradient overlay to prevent sharp edges of sparkles at the top */}
+      {/* Ensure this z-index is between sparkles and your form content */}
+      <div className="absolute inset-0 w-full h-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)] z-10"></div>
 
-            <div>
-              <label htmlFor="message" className="block text-sm font-medium text-brand-charcoal font-body mb-1">
-                Message <span className="text-red-500">*</span>
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                rows={5}
-                required
-                className={`${inputBaseClasses} resize-y`}
-                value={form.message}
-                onChange={handleChange}
-                placeholder="Tell me about your project or inquiry..."
-                disabled={isSubmitting}
-              />
-            </div>
+      {/* Custom Contact Page Content (heading and intro text) */}
+      {/* These elements need a higher z-index to appear above the sparkles */}
+      <h1 className="md:text-7xl text-3xl lg:text-8xl font-bold text-center text-white relative z-20 mb-8">
+        Let's Connect {/* Custom heading for your contact page */}
+      </h1>
+      <p className="text-white text-base md:text-xl max-w-xl text-center relative z-20 mb-8">
+        Have a project in mind, a question, or just want to connect? We'd love to hear from you.
+      </p>
 
-            <div className="text-center">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="inline-flex items-center justify-center px-10 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-brand-white bg-brand-gold hover:bg-brand-gold-light hover:text-brand-charcoal focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-gold transition-all duration-150 ease-in-out disabled:opacity-70 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? (
-                  <>
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Sending...
-                  </>
-                ) : (
-                  'Send Message'
-                )}
-              </button>
-            </div>
-
-            {submitStatus.message && (
-              <div className={`mt-6 p-4 rounded-md text-sm ${submitStatus.type === 'success' ? 'bg-green-50 text-green-700 border border-green-300' : 'bg-red-50 text-red-700 border border-red-300'}`}
-                   role="alert">
-                {submitStatus.message}
-              </div>
-            )}
-          </form>
-        </div>
+      {/* Your original Contact Form, wrapped to ensure it appears on top */}
+      <div className="relative z-20 bg-white p-6 md:p-8 rounded-lg shadow-xl max-w-md mx-auto w-full">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Your form fields remain the same */}
+          <div className="relative z-0 w-full group">
+            <input
+              id="name"
+              name="name"
+              type="text"
+              required
+              className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent py-2.5 px-0 text-sm text-gray-900 focus:border-indigo-600 focus:outline-none focus:ring-0"
+              placeholder=" "
+              value={form.name}
+              onChange={handleChange}
+            />
+            <label htmlFor="name" className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 peer-focus:text-indigo-600 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">
+              Your Name
+            </label>
+          </div>
+          <div className="relative z-0 w-full group">
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent py-2.5 px-0 text-sm text-gray-900 focus:border-indigo-600 focus:outline-none focus:ring-0"
+              placeholder=" "
+              value={form.email}
+              onChange={handleChange}
+            />
+            <label htmlFor="email" className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 peer-focus:text-indigo-600 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">
+              Your Email
+            </label>
+          </div>
+          <div className="relative z-0 w-full group">
+            <textarea
+              id="message"
+              name="message"
+              required
+              rows={4}
+              className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent py-2.5 px-0 text-sm text-gray-900 focus:border-indigo-600 focus:outline-none focus:ring-0"
+              placeholder=" "
+              value={form.message}
+              onChange={handleChange}
+            />
+            <label htmlFor="message" className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 peer-focus:text-indigo-600 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">
+              Message
+            </label>
+          </div>
+          <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-brand-gold hover:bg-brand-gold-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-gold">
+            Send Message
+          </button>
+        </form>
       </div>
     </div>
   );
 };
 
-export default ContactUsPage;
+export default ContactUs;

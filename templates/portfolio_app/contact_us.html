@@ -1,21 +1,29 @@
-{% extends "base.html" %} 
-{% load django_vite %} 
-{% block title %}Contact Us -
-Tony the Coder
-{% endblock title %} 
+{% extends "base.html" %}
+{% load django_vite %}
+{# Removed load static i18n as they are not explicitly used in this simplified version #}
+
+{% block title %}Contact Me - Tony the Coder{% endblock title %}
+
 {% block meta_description %}
-Get in touch with Tony the Coder to discuss projects, collaborations, or just to say hi!
-{%endblock meta_description %} 
-{% block breadcrumbs_block %} 
-{% if breadcrumbs %} 
-{% include 'partials/_breadcrumbs.html' with breadcrumbs=breadcrumbs %} 
-{% endif %} 
-{% endblock breadcrumbs_block %} 
+    Get in touch with Tony the Coder to discuss your web development projects, AI ideas, or collaboration opportunities.
+{% endblock meta_description %}
+
+{# REMOVED hero_section block entirely as React component will handle it #}
+
+{% block breadcrumbs_block %}
+    {% if breadcrumbs %}
+        {% include 'partials/_breadcrumbs.html' with breadcrumbs=breadcrumbs %}
+    {% endif %}
+{% endblock breadcrumbs_block %}
+
 {% block content %}
-<div id="react-contact-form-root"></div>
-{% endblock content %} 
-{% block extra_js %} 
-{{ block.super }}
-{%vite_react_refresh %} 
-{% vite_asset 'main.tsx' %} 
+<div id="react-contact-form-root">
+    {# The React ContactUs component (with sparkles background) will render here #}
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+    {{ block.super }}
+    {% vite_react_refresh %}
+    {% vite_asset 'main.tsx' %} {# Ensure main.tsx is set up to render ContactUs into react-contact-form-root #}
 {% endblock extra_js %}
