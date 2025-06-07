@@ -57,9 +57,10 @@
       }
     </script>
 
-    {% block extra_js %}
-        {# STEP 3: ADD THE VITE ASSET FOR THE NAVBAR ENTRY SCRIPT #}
-        {% vite_asset 'navbarEntry.tsx' %}
-    {% endblock %}
+  {% block extra_js %}
+    {# This loads the JavaScript for our React navbar component #}
+      {% vite_react_refresh %}
+    {% vite_asset 'navbarEntry.tsx' %}
+{% endblock %}
 </body>
 </html>
