@@ -29,8 +29,7 @@
         <script src="https://unpkg.com/htmx.org@latest/dist/htmx.min.js"></script>
     {% endblock extra_head %}
 </head>
-<body class="font-body bg-gray-50 text-brand-charcoal flex flex-col min-h-screen antialiased selection:bg-brand-gold selection:text-brand-white" style="background-color: var(--color-brand-white);">
-
+<body class="font-body text-brand-charcoal flex flex-col min-h-screen antialiased selection:bg-brand-gold selection:text-brand-white {% block body_class %}bg-gray-50{% endblock %}">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:z-[9999] focus:top-4 focus:left-4 focus:px-4 focus:py-2 focus:bg-brand-gold focus:text-white rounded-md shadow-lg">
         {% trans "Skip to main content" %}
     </a>
