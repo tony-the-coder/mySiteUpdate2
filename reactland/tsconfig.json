@@ -1,38 +1,18 @@
+// reactland/tsconfig.node.json
 {
   "compilerOptions": {
-    // Crucial for referenced projects
     "composite": true,
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "skipLibCheck": true,
-
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
-    "moduleDetection": "force",
-    "noEmit": true,
-    "jsx": "react-jsx",
-
-    /* Linting */
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    // "erasableSyntaxOnly": true, // Consider if needed or use "preserveValueImports" if your TS version is older
-    "noFallthroughCasesInSwitch": true,
-    // "noUncheckedSideEffectImports": true, // Consider if needed
-
-    // Path Aliases Configuration
-    // Assuming tsconfig.app.json is in the 'reactland' directory
-    "baseUrl": ".", // Sets the base directory for module resolution to 'reactland/'
-    "paths": {
-      "@/*": ["src/*"] // Maps '@/*' to 'reactland/src/*'
-    }
+    // "noEmit": true, // REMOVED: This is the source of TS6310, and indirectly TS6306
+    "declaration": false, // ADDED: Prevents generation of .d.ts files for vite.config.ts
+    "declarationMap": false, // ADDED: Prevents generation of .d.ts.map files
+    "types": ["node"]
   },
-  // Include all relevant source directories for the application
-  "include": ["src", "components"]
+  "include": ["vite.config.ts"]
 }

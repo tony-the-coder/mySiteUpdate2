@@ -1,9 +1,8 @@
 "use client";
-import React, { Suspense } from "react"; // IMPORT Suspense
+import React, { Suspense } from "react";
 import { motion } from "motion/react";
+import { Canvas } from "@react-three/fiber";
 
-// --- CHANGE 1: Use React.lazy instead of next/dynamic ---
-// We wrap the dynamic import in React.lazy and tell it to use the 'World' export from the module.
 const World = React.lazy(() =>
   import("@/components/ui/globe").then((m) => ({ default: m.World }))
 );
@@ -173,7 +172,6 @@ export default function GlobeDemo() {
   return (
     <div className="flex flex-row items-center justify-center py-20 h-screen md:h-auto dark:bg-black bg-white relative w-full">
       <div className="max-w-7xl mx-auto w-full relative overflow-hidden h-full md:h-[40rem] px-4">
-        {/* This motion.div is for the text content, we can leave it as is */}
         <motion.div
           initial={{
             opacity: 0,
@@ -188,7 +186,6 @@ export default function GlobeDemo() {
           }}
           className="div"
         >
-          {/* I've updated the text to be more relevant for your contact page */}
           <h2 className="text-center text-xl md:text-4xl font-bold text-black dark:text-white">
             Let's Build Something Together
           </h2>
@@ -196,14 +193,11 @@ export default function GlobeDemo() {
             I'm available for freelance projects and full-time opportunities worldwide.
           </p>
         </motion.div>
-
-        {/* This div positions the Globe */}
         <div className="absolute w-full -bottom-20 h-72 md:h-full z-10">
-          {/* --- CHANGE 2: Wrap the World component in Suspense ---
-            React needs a fallback to show while it's lazy-loading the component.
-          */}
           <Suspense fallback={<div className="text-center text-white">Loading Globe...</div>}>
-            <World data={sampleArcs} globeConfig={globeConfig} />
+            <Canvas>
+              <World data={sampleArcs} globeConfig={globeConfig} />
+            </Canvas>
           </Suspense>
         </div>
       </div>
