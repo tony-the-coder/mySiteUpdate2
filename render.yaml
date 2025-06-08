@@ -13,7 +13,8 @@ services:
     plan: free
     runtime: python
     buildCommand: "./build.sh"
-    startCommand: "gunicorn TonyTheCoderPortfolio.wsgi"
+    # CHANGED: Use explicit python -m gunicorn and full WSGI application path
+    startCommand: "python -m gunicorn TonyTheCoderPortfolio.wsgi:application"
     healthCheckPath: "/"
     envVars:
       - key: DATABASE_URL
