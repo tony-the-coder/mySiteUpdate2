@@ -1,4 +1,4 @@
-// reactland/src/components/ui/resizable-navbar.tsx
+// reactland/src/components/ui/resizable-navbar.tsx (Rewritten NavbarButton)
 
 "use client";
 import { cn } from "@/lib/utils";
@@ -31,8 +31,6 @@ interface MobileNavHeaderProps {
     children: React.ReactNode;
     className?: string;
 }
-
-// --- FIX #1: Re-added the optional 'onClose' prop ---
 interface MobileNavMenuProps {
     children: React.ReactNode;
     className?: string;
@@ -40,19 +38,7 @@ interface MobileNavMenuProps {
     onClose?: () => void;
 }
 
-// --- FIX #2: Corrected the 'NavbarButton' prop types to allow children ---
-type NavbarButtonProps = {
-  href?: string;
-  as?: React.ElementType;
-  children: React.ReactNode; // This line explicitly allows children
-  className?: string;
-  variant?: "primary" | "secondary" | "dark" | "gradient";
-} & (
-  React.ComponentPropsWithoutRef<"a"> | React.ComponentPropsWithoutRef<"button">
-);
-
-
-// --- COMPONENTS (No logical changes needed below, only types above) ---
+// --- COMPONENTS ---
 
 export const Navbar = ({ children, className }: NavbarProps) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -143,17 +129,30 @@ export const NavbarLogo = ({ visible }: { visible?: boolean; }) => (
     </a>
 );
 
-export const NavbarButton = ({ href, as: Tag = "a", children, className, variant = "primary", ...props }: NavbarButtonProps) => {
-    const baseStyles = "px-4 py-2 rounded-full button text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center";
-    const variantStyles = {
-        primary: "bg-white text-black shadow-md",
-        secondary: "bg-transparent shadow-none dark:text-white",
-        dark: "bg-black text-white shadow-md",
-        gradient: "bg-gradient-to-b from-blue-500 to-blue-700 text-white shadow-md",
-    };
+
+// --- NEW, SIMPLIFIED NAVBARBUTTON COMPONENT ---
+interface NewNavbarButtonProps {
+  href?: string;
+  className?: string;
+  children: React.ReactNode;
+  onClick?: () => void;
+}
+
+export const NavbarButton = ({ href, className, children, onClick }: NewNavbarButtonProps) => {
+    // This component will always render an `<a>` tag now for simplicity.
+    // If href is not provided, it will act like a button but still be a link.
+    // This avoids all the complex type issues.
     return (
-        <Tag href={href} className={cn(baseStyles, variantStyles[variant], className)} {...props}>
+        <a
+            href={href || "#"}
+            onClick={onClick}
+            className={cn(
+                "px-4 py-2 rounded-full text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center",
+                "bg-white text-black shadow-md", // Default styles
+                className
+            )}
+        >
             {children}
-        </Tag>
+        </a>
     );
 };
