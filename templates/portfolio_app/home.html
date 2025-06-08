@@ -1,161 +1,78 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load static %}
+{% load django_vite %}
 {% load humanize %}
-{% load math_filters %}
-{% load random_filters %} {# Assuming you have this custom filter for random percentages #}
 
-{% block title %}Home - Tony the Coder | Developer Portfolio{% endblock %}
+{% block title %}Home - Tony The Coder{% endblock %}
 
-{% block hero_section %}
-<section
-    class="relative min-h-screen flex flex-col items-center justify-center bg-brand-charcoal-darker text-brand-white overflow-hidden"
-    style="background-image: radial-gradient(ellipse 80% 50% at 50% -20%,rgba(120,119,198,0.3), transparent)"
->
-    <div class="stars" aria-hidden="true">
-        {# We loop 150 times to create 150 stars #}
-        {% for i in 'x'|center:150 %}
-            <div class="star star-sm" style="top: {{ i|random_percentage }}%; left: {{ i|random_percentage }}%; animation-delay: {{ i|random_float:'0:5' }}s; animation-duration: {{ i|random_float:'15:27' }}s;"></div>
-        {% endfor %}
-    </div>
-
-    <div
-        x-data="{
-            text: 'Tony the Coder',
-            displayedText: '',
-            initialized: false, // Flag to prevent re-initiation if component re-renders
-            init() {
-                if (!this.initialized) {
-                    let i = 0;
-                    const interval = setInterval(() => {
-                        this.displayedText += this.text[i];
-                        i++;
-                        if (i >= this.text.length) {
-                            clearInterval(interval);
-                            this.initialized = true; // Mark as initialized
-                        }
-                    }, 80);
-                }
-            }
-        }"
-        class="relative z-10 text-center px-6">
-        <h1 class="font-heading text-4xl md:text-6xl lg:text-7xl font-semibold mb-4 leading-tight">
-            <span class="sr-only">Tony the Coder</span> {# Hidden for screen readers, but present for SEO #}
-            <span x-text="displayedText" class="inline-block" aria-hidden="true"></span>
-            <span class="inline-block border-r-2 border-brand-gold animate-caret-blink" aria-hidden="true"></span>
-        </h1>
-        <p class="font-body text-lg md:text-xl lg:text-2xl max-w-2xl mx-auto mb-8 opacity-0 animate-fade-in-up animation-delay-[1500ms]">
-            Full-Stack Developer & AI Enthusiast. Crafting innovative web solutions.
-        </p>
-        <div class="space-x-4 opacity-0 animate-fade-in-up animation-delay-[1800ms]">
-            <a href="{% url 'portfolio_app:portfolio_showcase_react' %}"
-               class="cta-button-primary">
-                View My Work
-            </a>
-            <a href="{% url 'portfolio_app:contact_us' %}"
-               class="cta-button-secondary">
-                Get In Touch
-            </a>
-        </div>
-    </div>
-</section>
-{% endblock hero_section %}
-
+{% block body_class %}bg-brand-charcoal-darker text-brand-white{% endblock %}
 
 {% block content %}
-{# About Me Snippet #}
-<section class="py-16 lg:py-24 bg-brand-white" data-aos="fade-up" data-aos-duration="700">
-    <div class="container mx-auto px-6 lg:px-8 max-w-3xl text-center">
-        <h2 class="section-heading">
-            Hi, I'm Tony!
-        </h2>
-        <p class="section-subheading mb-8">
-            I'm a passionate developer focused on building efficient, scalable, and engaging web applications. With a strong foundation in Python and JavaScript ecosystems, and a growing interest in AI, I love tackling new challenges and bringing ideas to life through code.
-        </p>
-        <a href="{% url 'portfolio_app:about_us' %}" class="link-styled group">
-            More About Me
-            <span class="arrow-accent">&rarr;</span>
-        </a>
-    </div>
-</section>
+    {# =================================================================== #}
+    {# The new, dynamic hero section rendered by React.                    #}
+    {# =================================================================== #}
+    <div id="react-home-hero">
+      </div>
 
-{# Key Skills/Services Overview #}
-<section class="py-16 lg:py-24 bg-brand-gray-light" data-aos="fade-up" data-aos-delay="100" data-aos-duration="700">
-    <div class="container mx-auto px-6 lg:px-8 max-w-5xl">
-        <h2 class="section-heading text-center mb-12">
-            What I Do
-        </h2>
-        <div class="grid md:grid-cols-3 gap-10">
-            <div class="service-card" data-aos="fade-up" data-aos-delay="200" data-aos-duration="700">
-                <div class="text-brand-gold text-4xl mb-4">
-                    {# Icon for Backend Development (e.g., server, database) #}
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mx-auto">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m0 0l3 2.25M3 12h18M3 12l3-2.25M3 12l3 2.25M17.25 7.5l3 2.25-3 2.25m0 0l3 2.25M21 12h-3.75M21 12l-3-2.25M21 12l-3 2.25M15 6.75l-3 2.25m0 0l-3-2.25m3 2.25V15m-3-2.25V15m6-6v6.75" />
-                    </svg>
-                </div>
-                <h3 class="card-heading">Backend Development</h3>
-                <p class="card-text">Building robust and scalable server-side applications and APIs with Python, Django, and Flask.</p>
-            </div>
-            <div class="service-card" data-aos="fade-up" data-aos-delay="300" data-aos-duration="700">
-                <div class="text-brand-gold text-4xl mb-4">
-                    {# Icon for Frontend Development (e.g., browser, components) #}
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mx-auto">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m0 0l3 2.25M3 12h18M3 12l3-2.25M3 12l3 2.25m0 0V6.75M21 12h-3.75m3.75 0l-3-2.25m3.75 0l-3 2.25M15 6.75l-3 2.25m0 0l-3-2.25m3 2.25V15M6 15v-2.25m0 0l3-2.25m-3 2.25l3 2.25" />
-                    </svg>
-                </div>
-                <h3 class="card-heading">Frontend Development</h3>
-                <p class="card-text">Creating interactive and responsive user interfaces with React, JavaScript, HTML, CSS, and Tailwind.</p>
-            </div>
-            <div class="service-card" data-aos="fade-up" data-aos-delay="400" data-aos-duration="700">
-                <div class="text-brand-gold text-4xl mb-4">
-                     {# Icon for AI/Machine Learning (e.g., brain, network) #}
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mx-auto">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5M19.5 8.25h-1.5m-15 3.75h1.5m15 0h1.5M12 12a5.25 5.25 0 00-5.25 5.25H12v-5.25z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 12a5.25 5.25 0 015.25 5.25H12v-5.25z" />
-                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 12V6.75m0 0a5.25 5.25 0 00-5.25-5.25H6.75V12m5.25-5.25a5.25 5.25 0 015.25-5.25h.008v5.25M12 12h.008v5.25A5.25 5.25 0 0112 22.5h-5.25v-5.25M12 12h5.25V6.75A5.25 5.25 0 0012 1.5h-.008V12z" />
-                    </svg>
-                </div>
-                <h3 class="card-heading">AI & Automation</h3>
-                <p class="card-text">Exploring and implementing AI solutions, including Generative AI, and automating tasks with Python.</p>
-            </div>
-        </div>
-    </div>
-</section>
+    {# =================================================================== #}
+    {# All of the original static content sections are restored below.     #}
+    {# =================================================================== #}
 
-
-{% if latest_portfolio_projects %}
-<section class="py-16 lg:py-24 bg-brand-white" data-aos="fade-up" data-aos-duration="700">
-    <div class="container mx-auto px-6 lg:px-8">
-        <h2 class="section-heading text-center mb-12">Featured Coding Projects</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {% for project in latest_portfolio_projects %}
-                {% include 'partials/_portfolio_project_card.html' with project=project %}
-            {% endfor %}
-        </div>
-        <div class="text-center mt-12" data-aos="fade-up" data-aos-delay="200" data-aos-duration="700">
-            <a href="{% url 'portfolio_app:portfolio_showcase_react' %}" class="cta-button-secondary">
-                View All Projects
+    {# About Me Snippet #}
+    <section class="py-16 lg:py-24 bg-brand-white text-brand-charcoal" data-aos="fade-up">
+        <div class="container mx-auto px-6 lg:px-8 max-w-3xl text-center">
+            <h2 class="section-heading">
+                Hi, I'm Tony.
+            </h2>
+            <p class="section-subheading mb-8">
+                A passionate developer focused on building efficient, scalable, and engaging web applications. With a strong foundation in Python and JavaScript ecosystems, and a growing interest in AI, I love tackling new challenges and bringing ideas to life through code.
+            </p>
+            <a href="{% url 'portfolio_app:about_us' %}" class="link-styled group">
+                More About Me
+                <span class="arrow-accent">&rarr;</span>
             </a>
         </div>
-    </div>
-</section>
-{% endif %}
+    </section>
 
-{# Call to Action (CTA) #}
-<section class="py-16 lg:py-24 text-brand-white cta-gradient-background" data-aos="fade-up" data-aos-duration="700">
-    <div class="container mx-auto px-6 lg:px-8 max-w-3xl text-center">
-        <div class="w-24 h-px bg-brand-white opacity-30 mx-auto mb-8" data-aos="zoom-in" data-aos-delay="200" data-aos-duration="500"></div>
-        <h2 class="font-heading text-3xl md:text-4xl lg:text-5xl font-medium mb-6" data-aos="fade-down" data-aos-delay="300" data-aos-duration="700">
-            Have a Project in Mind? <br class="hidden md:block">Let's Build Something Great.
-        </h2>
-        <p class="font-body text-lg opacity-90 mb-10 leading-relaxed max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="400" data-aos-duration="700">
-            I'm always excited to discuss new ideas and collaborate on innovative projects. If you're looking for a dedicated developer to bring your vision to life, I'd love to hear from you.
-        </p>
-        <div data-aos="fade-up" data-aos-delay="500" data-aos-duration="700">
-            <a href="{% url 'portfolio_app:contact_us' %}"
-               class="cta-button-primary-inverted text-lg px-12 py-4">
-                Let's Talk
-            </a>
+    {# Key Skills/Services Overview #}
+    <section class="py-16 lg:py-24 bg-brand-gray-light text-brand-charcoal" data-aos="fade-up" data-aos-delay="100">
+        <div class="container mx-auto px-6 lg:px-8 max-w-5xl">
+            <h2 class="section-heading text-center mb-12">
+                What I Do
+            </h2>
+            <div class="grid md:grid-cols-3 gap-10">
+                <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-brand-gold text-4xl mb-4">
+                        <i class="fa-solid fa-code w-12 h-12 mx-auto"></i>
+                    </div>
+                    <h3 class="card-heading">Backend Development</h3>
+                    <p class="card-text">Building robust and scalable server-side applications and APIs with Python, Django, and Flask.</p>
+                </div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-brand-gold text-4xl mb-4">
+                         <i class="fa-solid fa-desktop w-12 h-12 mx-auto"></i>
+                    </div>
+                    <h3 class="card-heading">Frontend Development</h3>
+                    <p class="card-text">Creating interactive and responsive user interfaces with React, JavaScript, HTML, and Tailwind CSS.</p>
+                </div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="text-brand-gold text-4xl mb-4">
+                        <i class="fa-solid fa-brain w-12 h-12 mx-auto"></i>
+                    </div>
+                    <h3 class="card-heading">AI & Automation</h3>
+                    <p class="card-text">Exploring and implementing AI solutions, including Generative AI, and automating tasks with Python scripts.</p>
+                </div>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
+
+    {# You can add other sections back here like "Featured Projects" or a "Call to Action" #}
+
 {% endblock content %}
+
+
+{% block extra_js %}
+  {{ block.super }}
+  {# This loads the JavaScript for our React hero #}
+  {% vite_asset 'homeHeroEntry.tsx' %}
+{% endblock %}

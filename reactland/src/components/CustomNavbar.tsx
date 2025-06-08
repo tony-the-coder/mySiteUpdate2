@@ -1,3 +1,5 @@
+// reactland/src/components/CustomNavbar.tsx
+
 import { useState } from "react";
 import {
   Navbar,
@@ -12,7 +14,6 @@ import {
 } from "@/components/ui/resizable-navbar";
 
 export const CustomNavbar = () => {
-  // Define the navigation links based on your urls.py
   const navItems = [
     { name: "Home", link: "/" },
     { name: "About", link: "/about/" },
