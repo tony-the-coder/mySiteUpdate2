@@ -9,10 +9,10 @@
 
     /* Bundler mode: IMPORTANT for Vite and module resolution */
     "moduleResolution": "Bundler",
-    "allowImportingTsExtensions": true,
+    // "allowImportingTsExtensions": true, // REMOVED THIS LINE - Fixes TS5096
     "resolveJsonModule": true,
     "isolatedModules": true,
-    // "noEmit": true, // REMOVED THIS LINE - This was the source of TS6304
+    // "noEmit": true, // REMOVED THIS LINE in the previous step - Ensure it's gone
     "jsx": "react-jsx",
 
     /* Path Aliases and ES Module Interoperability */
