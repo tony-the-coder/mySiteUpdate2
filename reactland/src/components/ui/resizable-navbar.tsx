@@ -1,54 +1,49 @@
+// reactland/src/components/ui/resizable-navbar.tsx
 "use client";
 import { cn } from "@/lib/utils";
 import { IconMenu2, IconX } from "@tabler/icons-react";
-import {
-  motion,
-  AnimatePresence,
-  useScroll,
-  useMotionValueEvent,
-} from "motion/react";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "motion/react";
+import React, { useRef, useState, cloneElement, isValidElement } from "react";
 
-import React, { useRef, useState } from "react";
-
+// ... (Navbar, NavBody, NavItems, MobileNav, MobileNavHeader interfaces remain the same) ...
 
 interface NavbarProps {
-  children: React.ReactNode | ((visible: boolean) => React.ReactNode);
-  className?: string;
-}
+    children: React.ReactNode | ((visible: boolean) => React.ReactNode);
+    className?: string;
+  }
 
-interface NavBodyProps {
-  children: React.ReactNode;
-  className?: string;
-  visible?: boolean;
-}
+  interface NavBodyProps {
+    children: React.ReactNode;
+    className?: string;
+    visible?: boolean;
+  }
 
-interface NavItemsProps {
-  items: {
-    name: string;
-    link: string;
-  }[];
-  className?: string;
-  onItemClick?: () => void;
-  visible?: boolean;
-}
+  interface NavItemsProps {
+    items: {
+      name: string;
+      link: string;
+    }[];
+    className?: string;
+    onItemClick?: () => void;
+    visible?: boolean;
+  }
 
-interface MobileNavProps {
-  children: React.ReactNode;
-  className?: string;
-  visible?: boolean;
-}
+  interface MobileNavProps {
+    children: React.ReactNode;
+    className?: string;
+    visible?: boolean;
+  }
 
-interface MobileNavHeaderProps {
-  children: React.ReactNode;
-  className?: string;
-}
+  interface MobileNavHeaderProps {
+    children: React.ReactNode;
+    className?: string;
+  }
 
-interface MobileNavMenuProps {
-  children: React.ReactNode;
-  className?: string;
-  isOpen: boolean;
-  onClose: () => void;
-}
+  interface MobileNavMenuProps {
+    children: React.ReactNode;
+    className?: string;
+    isOpen: boolean;
+  }
 
 export const Navbar = ({ children, className }: NavbarProps) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -74,8 +69,8 @@ export const Navbar = ({ children, className }: NavbarProps) => {
       {typeof children === "function"
         ? children(visible)
         : React.Children.map(children, (child) =>
-            React.isValidElement(child)
-              ? React.cloneElement(
+            isValidElement(child)
+              ? cloneElement(
                   child as React.ReactElement<{ visible?: boolean }>,
                   { visible },
                 )
@@ -202,7 +197,6 @@ export const MobileNavMenu = ({
   children,
   className,
   isOpen,
-  onClose,
 }: MobileNavMenuProps) => {
   return (
     <AnimatePresence>
@@ -243,14 +237,25 @@ export const NavbarLogo = ({ visible }: { visible?: boolean }) => {
       href="/"
       className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal"
     >
-      {/* Example logo image */}
-      {/* <img src="path/to/your/logo.png" alt="logo" width={30} height={30} /> */}
       <span className={cn("font-medium transition-colors", visible ? "text-black dark:text-white" : "text-white dark:text-white")}>
         Tony the Coder
       </span>
     </a>
   );
 };
+
+// --- FIX IS HERE ---
+// Corrected the type definition for NavbarButtonProps to allow children
+type NavbarButtonProps = {
+  href?: string;
+  as?: React.ElementType;
+  children: React.ReactNode; // Explicitly allow children
+  className?: string;
+  variant?: "primary" | "secondary" | "dark" | "gradient";
+} & (
+  React.ComponentPropsWithoutRef<"a"> | React.ComponentPropsWithoutRef<"button">
+);
+
 
 export const NavbarButton = ({
   href,
@@ -259,16 +264,7 @@ export const NavbarButton = ({
   className,
   variant = "primary",
   ...props
-}: {
-  href?: string;
-  as?: React.ElementType;
-  children: React.ReactNode;
-  className?: string;
-  variant?: "primary" | "secondary" | "dark" | "gradient";
-} & (
-  | React.ComponentPropsWithoutRef<"a">
-  | React.ComponentPropsWithoutRef<"button">
-)) => {
+}: NavbarButtonProps) => { // Using the corrected type
   const baseStyles =
     "px-4 py-2 rounded-md bg-white button bg-white text-black text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center";
 
