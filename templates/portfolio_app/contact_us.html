@@ -10,11 +10,14 @@
 
 {# REMOVED hero_section block entirely as React component will handle it #}
 
-{% block breadcrumbs_block %}
-    {% if breadcrumbs %}
-        {% include 'partials/_breadcrumbs.html' with breadcrumbs=breadcrumbs %}
-    {% endif %}
-{% endblock breadcrumbs_block %}
+{% block body_class %}bg-brand-charcoal-darker{% endblock %}
+
+{##}
+{#{% block breadcrumbs_block %}#}
+{#    {% if breadcrumbs %}#}
+{#        {% include 'partials/_breadcrumbs.html' with breadcrumbs=breadcrumbs %}#}
+{#    {% endif %}#}
+{#{% endblock breadcrumbs_block %}#}
 
 {% block content %}
 <div id="react-contact-form-root">

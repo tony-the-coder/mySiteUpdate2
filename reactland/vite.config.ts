@@ -28,6 +28,7 @@ export default defineConfig(({ mode }) => {
           navbarEntry: path.resolve(__dirname, "src", "navbarEntry.tsx"),
           portfolioPageEntry: path.resolve(__dirname, "src", "portfolioPageEntry.tsx"),
           aboutPageEntry: path.resolve(__dirname, "src", "aboutPageEntry.tsx"),
+          contactPageEntry: path.resolve(__dirname, "src", "contactPageEntry.tsx"),
         }
       }
     }
