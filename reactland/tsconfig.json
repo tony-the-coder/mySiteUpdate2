@@ -9,10 +9,10 @@
 
     /* Bundler mode: IMPORTANT for Vite and module resolution */
     "moduleResolution": "Bundler",
-    "allowImportingTsExtensions": true, // UNCOMMENTED: Required for direct .ts/.tsx imports
+    "allowImportingTsExtensions": true, // Required for direct .ts/.tsx imports
     "resolveJsonModule": true,
     "isolatedModules": true,
-    // "noEmit": true, // REMOVED THIS LINE in the previous step - Ensure it's gone
+    "noEmit": true, // UNCOMMENTED: Fixes TS5096
     "jsx": "react-jsx",
 
     /* Path Aliases and ES Module Interoperability */
