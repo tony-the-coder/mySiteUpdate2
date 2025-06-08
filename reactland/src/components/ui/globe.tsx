@@ -1,130 +1,124 @@
-// reactland/src/components/ui/globe.tsx
+// reactland/src/components/ui/globe.tsx (Final Version)
 
 "use client";
-import { useEffect, useRef, useState } from "react";
+import {Suspense, useEffect, useRef } from "react";
 import * as THREE from "three";
-import { Color, Scene, Fog, PerspectiveCamera, Vector3 } from "three";
 import ThreeGlobe from "three-globe";
-import { useThree, Canvas, extend } from "@react-three/fiber";
+import { Canvas, extend, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import countries from "@/data/globe.json";
 
-// Type definitions...
+// --- FIX for TS2339 ---
+// This declaration tells TypeScript about the custom <threeGlobe> element.
 declare module "@react-three/fiber" {
   interface ThreeElements {
-    threeGlobe: ThreeElements["mesh"] & { new (): ThreeGlobe };
+    threeGlobe: any;
   }
 }
+
+// Make ThreeGlobe available to the R3F renderer
 extend({ ThreeGlobe });
-const RING_PROPAGATION_SPEED = 3;
-const aspect = 1.2;
-const cameraZ = 300;
-type Position = { /* ... */ };
-export type GlobeConfig = { /* ... */ };
-interface WorldProps { /* ... */ };
 
-// Globe component...
-export function Globe({ globeConfig, data }: WorldProps) {
-    // This function is quite large, its content remains the same as our last fix.
-    // I'm omitting it here for brevity, but it should be kept as is.
-    const globeRef = useRef<ThreeGlobe | null>(null);
-    const groupRef = useRef<THREE.Group>(null);
-    const [isInitialized, setIsInitialized] = useState(false);
-    const defaultProps = { /* ... */ };
+// Type definitions for props
+type Position = {
+  order: number;
+  startLat: number;
+  startLng: number;
+  endLat: number;
+  endLng: number;
+  arcAlt: number;
+  color: string;
+};
 
-    useEffect(() => {
-        if (!globeRef.current && groupRef.current) {
-            globeRef.current = new ThreeGlobe();
-            groupRef.current.add(globeRef.current);
-            setIsInitialized(true);
-        }
-    }, []);
+export type GlobeConfig = {
+  pointSize?: number;
+  globeColor?: string;
+  emissive?: string;
+  emissiveIntensity?: number;
+  shininess?: number;
+  polygonColor?: string;
+  ambientLight?: string;
+  directionalLeftLight?: string;
+  directionalTopLight?: string;
+  pointLight?: string;
+  arcTime?: number;
+  arcLength?: number;
+};
 
-    useEffect(() => {
-        if (!globeRef.current || !isInitialized) return;
-        const globeMaterial = globeRef.current.globeMaterial() as any;
-        globeMaterial.color = new Color(globeConfig.globeColor);
-        globeMaterial.emissive = new Color(globeConfig.emissive);
-        globeMaterial.emissiveIntensity = globeConfig.emissiveIntensity || 0.1;
-        globeMaterial.shininess = globeConfig.shininess || 0.9;
-    }, [isInitialized, globeConfig]);
-
-    useEffect(() => {
-        if (!globeRef.current || !isInitialized || !data) return;
-        let points: any[] = [];
-        for (let i = 0; i < data.length; i++) {
-            const arc = data[i];
-            points.push({ size: defaultProps.pointSize, order: arc.order, color: arc.color, lat: arc.startLat, lng: arc.startLng });
-            points.push({ size: defaultProps.pointSize, order: arc.order, color: arc.color, lat: arc.endLat, lng: arc.endLng });
-        }
-        const filteredPoints = points.filter((v, i, a) => a.findIndex((v2) => ["lat", "lng"].every((k) => v2[k as "lat" | "lng"] === v[k as "lat" | "lng"])) === i);
-
-        globeRef.current.hexPolygonsData(countries.features)
-            .hexPolygonResolution(3)
-            .hexPolygonMargin(0.7)
-            .showAtmosphere(defaultProps.showAtmosphere)
-            .atmosphereColor(defaultProps.atmosphereColor)
-            .atmosphereAltitude(defaultProps.atmosphereAltitude)
-            .hexPolygonColor(() => defaultProps.polygonColor);
-
-        globeRef.current.arcsData(data)
-            .arcStartLat((d: any) => d.startLat)
-            .arcStartLng((d: any) => d.startLng)
-            .arcEndLat((d: any) => d.endLat)
-            .arcEndLng((d: any) => d.endLng)
-            .arcColor((e: any) => e.color)
-            .arcAltitude((e: any) => e.arcAlt)
-            .arcStroke(() => [0.32, 0.28, 0.3][Math.round(Math.random() * 2)])
-            .arcDashLength(defaultProps.arcLength)
-            .arcDashInitialGap((e: any) => e.order)
-            .arcDashGap(15)
-            .arcDashAnimateTime(() => defaultProps.arcTime);
-
-        globeRef.current.pointsData(filteredPoints)
-            .pointColor((e: any) => e.color)
-            .pointsMerge(true)
-            .pointAltitude(0.0)
-            .pointRadius(2);
-
-        globeRef.current.ringsData([])
-            .ringColor(() => defaultProps.polygonColor)
-            .ringMaxRadius(defaultProps.maxRings)
-            .ringPropagationSpeed(RING_PROPAGATION_SPEED)
-            .ringRepeatPeriod((defaultProps.arcTime! * defaultProps.arcLength!) / defaultProps.rings!);
-    }, [isInitialized, data, defaultProps]);
-
-    return <group ref={groupRef} />;
+interface WorldProps {
+  globeConfig: GlobeConfig;
+  data: Position[];
 }
 
-// ... WebGLRendererConfig and World components remain the same ...
-export function WebGLRendererConfig() { /* ... */ }
-export function World(props: WorldProps) { /* ... */ }
+// This is the internal component that renders the globe itself
+function GlobeInternal({ globeConfig, data }: WorldProps) {
+  const globeRef = useRef<ThreeGlobe | null>(null);
 
+  useEffect(() => {
+    if (globeRef.current) {
+      const globeMaterial = globeRef.current.globeMaterial() as THREE.MeshPhongMaterial;
+      globeMaterial.color = new THREE.Color(globeConfig.globeColor);
+      globeMaterial.emissive = new THREE.Color(globeConfig.emissive);
+      globeMaterial.emissiveIntensity = globeConfig.emissiveIntensity || 0.1;
+      globeMaterial.shininess = globeConfig.shininess || 0.9;
 
-// --- FIX IS HERE ---
-export function hexToRgb(hex: string) {
-  // Changed 'var' to 'const'
-  const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-  hex = hex.replace(shorthandRegex, function (_m, r, g, b) {
-    return r + r + g + g + b + b;
-  });
+      globeRef.current
+        .hexPolygonsData(countries.features)
+        .hexPolygonResolution(3)
+        .hexPolygonMargin(0.7)
+        .hexPolygonColor(() => globeConfig.polygonColor || "");
 
-  // Changed 'var' to 'const'
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16),
-      }
-    : null;
+      // --- FIX for TS2345 ---
+      // We provide a default value using `??` in case the prop is undefined.
+      globeRef.current
+        .arcsData(data)
+        .arcColor((e: any) => e.color)
+        .arcAltitude((e: any) => e.arcAlt)
+        .arcDashLength(globeConfig.arcLength ?? 0.9)
+        .arcDashGap(15)
+        .arcDashAnimateTime(() => globeConfig.arcTime ?? 1000);
+    }
+  }, [globeConfig, data]);
+
+  return <threeGlobe ref={globeRef} />;
 }
 
-export function genRandomNumbers(min: number, max: number, count: number) {
-  const arr: number[] = []; // This was already correct
-  while (arr.length < count) {
-    const r = Math.floor(Math.random() * (max - min)) + min;
-    if (arr.indexOf(r) === -1) arr.push(r);
-  }
-  return arr;
+// Main exported component that sets up the 3D scene
+export function World({ globeConfig, data }: WorldProps) {
+  const { gl } = useThree();
+  useEffect(() => {
+    gl.setPixelRatio(window.devicePixelRatio);
+  }, [gl]);
+
+  return (
+    <>
+      <ambientLight color={globeConfig.ambientLight} intensity={0.6} />
+      <directionalLight color={globeConfig.directionalLeftLight} position={new THREE.Vector3(-400, 100, 400)} />
+      <directionalLight color={globeConfig.directionalTopLight} position={new THREE.Vector3(-200, 500, 200)} />
+      <pointLight color={globeConfig.pointLight} position={new THREE.Vector3(-200, 500, 200)} intensity={0.8} />
+      <GlobeInternal globeConfig={globeConfig} data={data} />
+      <OrbitControls
+        enablePan={false}
+        enableZoom={false}
+        minDistance={300}
+        maxDistance={300}
+        autoRotateSpeed={1}
+        autoRotate={true}
+        minPolarAngle={Math.PI / 3.5}
+        maxPolarAngle={Math.PI - Math.PI / 3}
+      />
+    </>
+  );
+}
+
+// The Canvas wrapper has been moved to the component that USES the Globe (GlobeDemo.tsx)
+// To provide Suspense, which is best practice.
+export default function WorldCanvasWrapper(props: WorldProps) {
+    return (
+        <Canvas>
+            <Suspense fallback={null}>
+                <World {...props} />
+            </Suspense>
+        </Canvas>
+    );
 }
