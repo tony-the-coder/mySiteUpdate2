@@ -2,21 +2,28 @@
 import os
 from pathlib import Path
 import dotenv
+import dj_database_url  # <--- ADD THIS IMPORT
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load .env file
+# Load .env file for local development
 env_path = BASE_DIR / ".env"
 dotenv.load_dotenv(dotenv_path=env_path)
 
-SECRET_KEY = os.environ.get(
-    "DJANGO_SECRET_KEY", "fallback-insecure-key-for-dev-portfolio"
-)
-DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
-print(f"DJANGO DEBUG IS: {DEBUG}")
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "fallback-insecure-key-for-dev")
 
-ALLOWED_HOSTS = []  # Add your domain names here for production
+# The DEBUG variable will be 'False' on Render and 'True' locally
+DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
+
+ALLOWED_HOSTS = []
+
+# --- ADD RENDER DEPLOYMENT HOST ---
+# This is the hostname Render will assign to your app.
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
 
 # Application definition
 INSTALLED_APPS = [
@@ -25,17 +32,19 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "whitenoise.runserver_nostatic",  # <--- ADD THIS for WhiteNoise
     "django.contrib.staticfiles",
     "django.contrib.humanize",
     # Third-party apps
     "django_ckeditor_5",
-    "django_vite",  # Vite integration
+    "django_vite",
     # Your apps
     "portfolio_app",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # <--- ADD THIS right after SecurityMiddleware
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -64,19 +73,29 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "TonyTheCoderPortfolio.wsgi.application"
 
-# Database
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+
+# --- DATABASE CONFIGURATION ---
+# Uses SQLite locally and PostgreSQL in production (on Render)
+if DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
+else:
+    # This reads the DATABASE_URL environment variable provided by Render
+    DATABASES = {
+        'default': dj_database_url.config(
+            conn_max_age=600,
+            ssl_require=True
+        )
+    }
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -84,24 +103,25 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 LANGUAGE_CODE = "en-us"
-TIME_ZONE = "UTC"
+TIME_ZONE = "America/New_York" # <--- CHANGED to a more specific timezone
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = "/static/"  # This remains important
-
-# Directories where Django will look for static files additionally to app's 'static/' dirs
-STATICFILES_DIRS = [
-    BASE_DIR / "assets",
-    BASE_DIR / "static",   # Vite will build into a 'vite' subfolder here for production collection
-]
+# --- STATIC & MEDIA FILES ---
+STATIC_URL = "/static/"
+MEDIA_URL = "/media/"
 
 # This is where `collectstatic` will gather all static files for deployment.
-STATIC_ROOT = BASE_DIR / "staticfiles_collected"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# Tell WhiteNoise to use a more efficient storage backend in production
+if not DEBUG:
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+# This directory is for your source static files (which Vite also uses)
+STATICFILES_DIRS = [BASE_DIR / "assets"]
 
 # Media files (User-uploaded content)
-MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -111,48 +131,19 @@ LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
+# --- CSRF Trusted Origins for Render ---
+# This is required for secure form submissions on the live site
+if RENDER_EXTERNAL_HOSTNAME:
+    CSRF_TRUSTED_ORIGINS = [
+        f'https://{RENDER_EXTERNAL_HOSTNAME}'
+    ]
+
 # --- Django-Vite Settings ---
-DJANGO_VITE_DEV_MODE = (
-    DEBUG  # Enables Vite HMR and dev server proxying if DEBUG is True
-)
-
-# Path where Vite generates assets to (relative to BASE_DIR or absolute) for `collectstatic_vite`
-DJANGO_VITE_ASSETS_PATH = BASE_DIR / "assets" / "vite"
-
-# Root directory of your Vite project (where package.json and vite.config.js are)
+# This remains the same, as the build process handles the output.
+DJANGO_VITE_DEV_MODE = DEBUG
+DJANGO_VITE_ASSETS_PATH = BASE_DIR / "reactland" / "dist" # <-- CHANGED: Point to Vite's output dir
 DJANGO_VITE_APP_DIR = BASE_DIR / "reactland"
-print(f"DJANGO_VITE_APP_DIR IS SET TO: '{DJANGO_VITE_APP_DIR}'")
-
-# Vite Dev Server connection settings
-DJANGO_VITE_DEV_SERVER_HOST = "localhost"
-DJANGO_VITE_DEV_SERVER_PORT = 5173
 
 if DEBUG:
-    # Workaround: Make Django-Vite prepend /static/ to match Vite dev server base if Vite is also configured to serve from /static/
-    DJANGO_VITE_STATIC_URL_PREFIX = "/static/"
-    print(
-        f"DJANGO_VITE_STATIC_URL_PREFIX IS SET TO: '{DJANGO_VITE_STATIC_URL_PREFIX}' (Vite dev workaround)"
-    )
-else:
-    # For production, assets are served from a subfolder of STATIC_URL (e.g., /static/vite/)
-    # This prefix should match the `base` in your Vite config's production build.
-    DJANGO_VITE_STATIC_URL_PREFIX = (
-        "vite/"  # Assuming Vite's `build.base` is `/static/vite/`
-    )
-    print(
-        f"DJANGO_VITE_STATIC_URL_PREFIX IS SET TO: '{DJANGO_VITE_STATIC_URL_PREFIX}' (Production)"
-    )
-
-
-# --- CKEditor 5 Settings ---
-# Example (ensure you have these configurations if you use them in forms.py):
-# CKEDITOR_5_CONFIGS = {
-# 'default': {
-# 'toolbar': ['heading', '|', 'bold', 'italic', 'link',
-# 'bulletedList', 'numberedList', 'blockQuote', 'imageUpload'],
-# },
-# 'small': {
-# 'toolbar': ['bold', 'italic', 'link', 'bulletedList'],
-#         'height': 150,
-# },
-# }
+    DJANGO_VITE_DEV_SERVER_HOST = "localhost"
+    DJANGO_VITE_DEV_SERVER_PORT = 5173

@@ -1,0 +1,30 @@
+# render.yaml
+
+services:
+  # A PostgreSQL database
+  - type: pserv
+    name: tcc-portfolio-db
+    plan: free
+    databaseName: tcc_portfolio_db
+    user: tony_the_coder
+    postgresMajorVersion: "14"
+
+  # A Web Service for our Django App
+  - type: web
+    name: tcc-portfolio-app
+    plan: free
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn TonyTheCoderPortfolio.wsgi"
+    healthCheckPath: "/"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: tcc-portfolio-db
+          property: connectionString
+      - key: DJANGO_SECRET_KEY
+        generateValue: true # Render will generate a secret key for you
+      - key: PYTHON_VERSION
+        value: "3.12.3" # Match your Python version
+      - key: DJANGO_DEBUG
+        value: "False"
