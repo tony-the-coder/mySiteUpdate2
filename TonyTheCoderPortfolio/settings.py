@@ -2,7 +2,7 @@
 import os
 from pathlib import Path
 import dotenv
-import dj_database_url  # <--- ADD THIS IMPORT
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "whitenoise.runserver_nostatic",  # <--- ADD THIS for WhiteNoise
+    "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
     "django.contrib.humanize",
     # Third-party apps
@@ -44,7 +44,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # <--- ADD THIS right after SecurityMiddleware
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -103,7 +103,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 LANGUAGE_CODE = "en-us"
-TIME_ZONE = "America/New_York" # <--- CHANGED to a more specific timezone
+TIME_ZONE = "America/New_York"
 USE_I18N = True
 USE_TZ = True
 
@@ -119,7 +119,10 @@ if not DEBUG:
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # This directory is for your source static files (which Vite also uses)
-STATICFILES_DIRS = [BASE_DIR / "assets"]
+STATICFILES_DIRS = [
+    BASE_DIR / "assets",
+    BASE_DIR / "assets" / "vite" # ADDED: Explicitly include Vite's build output for collectstatic
+]
 
 # Media files (User-uploaded content)
 MEDIA_ROOT = BASE_DIR / "media/"
@@ -139,11 +142,13 @@ if RENDER_EXTERNAL_HOSTNAME:
     ]
 
 # --- Django-Vite Settings ---
-# This remains the same, as the build process handles the output.
-DJANGO_VITE_DEV_MODE = DEBUG
-DJANGO_VITE_ASSETS_PATH = BASE_DIR / "reactland" / "dist" # <-- CHANGED: Point to Vite's output dir
-DJANGO_VITE_APP_DIR = BASE_DIR / "reactland"
-
-if DEBUG:
-    DJANGO_VITE_DEV_SERVER_HOST = "localhost"
-    DJANGO_VITE_DEV_SERVER_PORT = 5173
+DJANGO_VITE = {
+    "default": {
+        "build_dir": BASE_DIR / "assets" / "vite", # CHANGED: Points to Vite's actual output directory
+        "manifest_path": BASE_DIR / "assets" / "vite" / "manifest.json", # CHANGED: Path to the manifest file
+        "dev_server_port": 5173,
+        "dev_server_host": "localhost",
+        "static_url_prefix": "static/", # Ensures Vite assets are served under /static/
+    }
+}
+# Removed individual DJANGO_VITE_* settings as they are now part of the DJANGO_VITE dictionary
