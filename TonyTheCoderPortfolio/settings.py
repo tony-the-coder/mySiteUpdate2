@@ -121,7 +121,7 @@ if not DEBUG:
 # This directory is for your source static files (which Vite also uses)
 STATICFILES_DIRS = [
     BASE_DIR / "assets",
-    BASE_DIR / "assets" / "vite" # ADDED: Explicitly include Vite's build output for collectstatic
+    BASE_DIR / "assets" / "vite"
 ]
 
 # Media files (User-uploaded content)
@@ -144,11 +144,10 @@ if RENDER_EXTERNAL_HOSTNAME:
 # --- Django-Vite Settings ---
 DJANGO_VITE = {
     "default": {
-        "build_dir": BASE_DIR / "assets" / "vite", # CHANGED: Points to Vite's actual output directory
-        "manifest_path": BASE_DIR / "assets" / "vite" / "manifest.json", # CHANGED: Path to the manifest file
+        # REMOVED: "build_dir": BASE_DIR / "assets" / "vite",
+        "manifest_path": BASE_DIR / "assets" / "vite" / "manifest.json",
         "dev_server_port": 5173,
         "dev_server_host": "localhost",
-        "static_url_prefix": "static/", # Ensures Vite assets are served under /static/
+        "static_url_prefix": "static/",
     }
 }
-# Removed individual DJANGO_VITE_* settings as they are now part of the DJANGO_VITE dictionary
