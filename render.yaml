@@ -6,7 +6,7 @@ services:
     name: tcc-portfolio-db
     plan: free
     # CORRECTED a
-    postgresMajorVersion: 14
+    postgresMajorVersion: 16
     ipAllowList: [] # Required for free instances
 
   # A Web Service for our Django App
