@@ -9,7 +9,7 @@
 
     /* Bundler mode: IMPORTANT for Vite and module resolution */
     "moduleResolution": "Bundler",
-    // "allowImportingTsExtensions": true, // REMOVED THIS LINE - Fixes TS5096
+    "allowImportingTsExtensions": true, // UNCOMMENTED: Required for direct .ts/.tsx imports
     "resolveJsonModule": true,
     "isolatedModules": true,
     // "noEmit": true, // REMOVED THIS LINE in the previous step - Ensure it's gone

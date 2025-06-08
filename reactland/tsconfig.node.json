@@ -10,8 +10,8 @@
     "esModuleInterop": true,
     "strict": true,
     // "noEmit": true, // REMOVED THIS LINE - Fixes TS6310
-    "declaration": false, // ADDED: Prevents generation of .d.ts files for vite.config.ts
-    "declarationMap": false, // ADDED: Prevents generation of .d.ts.map files (good practice)
+    "declaration": true, // CHANGED: Must be true for composite projects
+    "declarationMap": true, // CHANGED: Should align with declaration
     "types": ["node"]
   },
   "include": ["vite.config.ts"]
