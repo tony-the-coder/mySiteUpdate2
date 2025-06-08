@@ -12,8 +12,10 @@ services:
     name: tcc-portfolio-app
     plan: free
     runtime: python
-    buildCommand: "./build.sh"
-    # CHANGED: Use explicit python -m gunicorn and full WSGI application path
+    buildCommand: |
+      ./build.sh
+      python manage.py migrate
+
     startCommand: "python -m gunicorn TonyTheCoderPortfolio.wsgi:application"
     healthCheckPath: "/"
     envVars:
@@ -26,4 +28,4 @@ services:
       - key: PYTHON_VERSION
         value: "3.12.3"
       - key: DJANGO_DEBUG
-        value: "True"
+        value: "False"
