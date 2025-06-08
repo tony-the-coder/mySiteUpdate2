@@ -148,6 +148,6 @@ DJANGO_VITE = {
         "manifest_path": BASE_DIR / "assets" / "vite" / "manifest.json",
         "dev_server_port": 5173,
         "dev_server_host": "localhost",
-        "static_url_prefix": "static/",
+        "static_url_prefix": "",
     }
 }
