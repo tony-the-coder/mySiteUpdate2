@@ -30,7 +30,7 @@ export const CustomNavbar = () => {
         <NavbarLogo />
         <NavItems items={navItems} />
         <div className="flex items-center gap-4">
-          <NavbarButton href="/contact/" variant="primary" as="a" className="!bg-brand-gold hover:!bg-brand-gold-light !text-brand-charcoal">
+          <NavbarButton href="/contact/" className="!bg-brand-gold hover:!bg-brand-gold-light !text-brand-charcoal"> {/* Removed variant and as */}
             Contact Me
           </NavbarButton>
         </div>
@@ -52,7 +52,7 @@ export const CustomNavbar = () => {
             </a>
           ))}
           <div className="w-full h-px bg-gray-200 dark:bg-neutral-800 my-4" />
-          <NavbarButton href="/contact/" variant="primary" as="a" className="w-full !bg-brand-gold hover:!bg-brand-gold-light !text-brand-charcoal">
+          <NavbarButton href="/contact/" className="w-full !bg-brand-gold hover:!bg-brand-gold-light !text-brand-charcoal"> {/* Removed variant and as */}
             Contact Me
           </NavbarButton>
         </MobileNavMenu>
