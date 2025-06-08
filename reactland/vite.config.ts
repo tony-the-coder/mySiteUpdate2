@@ -22,13 +22,14 @@ export default defineConfig(({ mode }) => {
       manifest: "manifest.json",
       outDir: path.resolve(__dirname, "..", "assets", "vite"),
       rollupOptions: {
-        // CORRECTED: All entry points are listed here
+        // ADDED: homeHeroEntry.tsx as an input entry point
         input: {
           main: path.resolve(__dirname, "src", "main.tsx"),
           navbarEntry: path.resolve(__dirname, "src", "navbarEntry.tsx"),
           portfolioPageEntry: path.resolve(__dirname, "src", "portfolioPageEntry.tsx"),
           aboutPageEntry: path.resolve(__dirname, "src", "aboutPageEntry.tsx"),
           contactPageEntry: path.resolve(__dirname, "src", "contactPageEntry.tsx"),
+          homeHeroEntry: path.resolve(__dirname, "src", "homeHeroEntry.tsx"), // <-- ADD THIS LINE
         }
       }
     }
