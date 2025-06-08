@@ -1,15 +1,13 @@
 # render.yaml
 
-services:
-  # A PostgreSQL database
-  - type: pserv
-    name: tcc-portfolio-db
-    plan: free
-    # CORRECTED a
-    postgresMajorVersion: 16
-    ipAllowList: [] # Required for free instances
+# This top-level key is specifically for database instances.
+databases:
+  - name: tcc-portfolio-db # This is the name for your database service
+    plan: free # Use the free instance type
+    postgresMajorVersion: 14
 
-  # A Web Service for our Django App
+# The 'services' key is now only for your web application.
+services:
   - type: web
     name: tcc-portfolio-app
     plan: free
