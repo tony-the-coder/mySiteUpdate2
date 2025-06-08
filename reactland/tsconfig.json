@@ -1,18 +1,34 @@
-// reactland/tsconfig.node.json
+// reactland/tsconfig.json
 {
   "compilerOptions": {
-    "composite": true,
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-    "skipLibCheck": true,
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode: IMPORTANT for Vite and module resolution */
     "moduleResolution": "Bundler",
-    "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    // "noEmit": true, // REMOVED THIS LINE - This was the source of TS6304
+    "jsx": "react-jsx",
+
+    /* Path Aliases and ES Module Interoperability */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+
+    /* Linting */
     "strict": true,
-    // "noEmit": true, // REMOVED: This is the source of TS6310, and indirectly TS6306
-    "declaration": false, // ADDED: Prevents generation of .d.ts files for vite.config.ts
-    "declarationMap": false, // ADDED: Prevents generation of .d.ts.map files
-    "types": ["node"]
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
   },
-  "include": ["vite.config.ts"]
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
