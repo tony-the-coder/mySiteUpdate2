@@ -19,7 +19,10 @@ DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
 # --- ALLOWED_HOSTS for Heroku and custom domains ---
 ALLOWED_HOSTS = []
 
-# Add Heroku's dynamic hostname if available
+# Allow all Heroku subdomains (including the one with the hash like ttc-portfolio-49dd8f292b3b.herokuapp.com)
+ALLOWED_HOSTS.append('*.herokuapp.com')
+
+# Also explicitly add the base Heroku app name if HEROKU_APP_NAME is set
 HEROKU_APP_NAME = os.environ.get('HEROKU_APP_NAME')
 if HEROKU_APP_NAME:
     ALLOWED_HOSTS.append(f'{HEROKU_APP_NAME}.herokuapp.com')
@@ -146,14 +149,18 @@ LOGOUT_REDIRECT_URL = "/"
 # --- CSRF Trusted Origins for Heroku ---
 CSRF_TRUSTED_ORIGINS = []
 
+# Allow all Heroku subdomains (including the one with the hash)
+CSRF_TRUSTED_ORIGINS.append('https://*.herokuapp.com')
+
+# Add custom domains with HTTPS
+CSRF_TRUSTED_ORIGINS.append('https://tonythecoder.com')
+CSRF_TRUSTED_ORIGINS.append('https://www.tonythecoder.com')
+
+# If HEROKU_APP_NAME is set, also explicitly add the app-specific domain
 if HEROKU_APP_NAME:
     CSRF_TRUSTED_ORIGINS.append(f'https://{HEROKU_APP_NAME}.herokuapp.com')
     # If you use a custom domain on Heroku, its canonical host might be herokudns.com
     CSRF_TRUSTED_ORIGINS.append(f'https://{HEROKU_APP_NAME}.herokudns.com')
-
-# Add your custom domains with HTTPS
-CSRF_TRUSTED_ORIGINS.append('https://tonythecoder.com')
-CSRF_TRUSTED_ORIGINS.append('https://www.tonythecoder.com')
 
 
 # --- Django-Vite Settings ---
