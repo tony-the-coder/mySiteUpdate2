@@ -13,18 +13,24 @@ dotenv.load_dotenv(dotenv_path=env_path)
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "fallback-insecure-key-for-dev")
 
-# The DEBUG variable will be 'False' on Render and 'True' locally
+# The DEBUG variable will be 'False' in production and 'True' locally
 DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
 
-# --- ALLOWED_HOSTS for Heroku and custom domains ---
-ALLOWED_HOSTS = ['ttc-portfolio-49dd8f292b3b.herokuapp.com']
+# --- ALLOWED_HOSTS for Heroku, Render, and custom domains ---
+ALLOWED_HOSTS = []
 
-# Allow all Heroku subdomains (including the one with the hash like ttc-portfolio-49dd8f292b3b.herokuapp.com)
+# Allow all Heroku subdomains (like ttc-portfolio-XXXX.herokuapp.com)
+ALLOWED_HOSTS.append('*.herokuapp.com')
 
-# Also explicitly add the base Heroku app name if HEROKU_APP_NAME is set
+# Explicitly add the base Heroku app name if HEROKU_APP_NAME is set
 HEROKU_APP_NAME = os.environ.get('HEROKU_APP_NAME')
 if HEROKU_APP_NAME:
     ALLOWED_HOSTS.append(f'{HEROKU_APP_NAME}.herokuapp.com')
+
+# Add Render deployment host if RENDER_EXTERNAL_HOSTNAME is set
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # Add your custom domains
 ALLOWED_HOSTS.append('tonythecoder.com')
@@ -76,7 +82,7 @@ TEMPLATES = [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
+                "django.contrib.messages.context_processors.messages", # Corrected line
             ],
         },
     },
@@ -86,7 +92,7 @@ WSGI_APPLICATION = "TonyTheCoderPortfolio.wsgi.application"
 
 
 # --- DATABASE CONFIGURATION ---
-# Uses SQLite locally and PostgreSQL in production (on Heroku)
+# Uses SQLite locally and PostgreSQL in production (on Heroku or Render)
 if DEBUG:
     DATABASES = {
         "default": {
@@ -95,11 +101,11 @@ if DEBUG:
         }
     }
 else:
-    # This reads the DATABASE_URL environment variable provided by Heroku
+    # This reads the DATABASE_URL environment variable provided by Heroku or Render
     DATABASES = {
         'default': dj_database_url.config(
             conn_max_age=600,
-            ssl_require=True # Heroku PostgreSQL URLs typically require SSL
+            ssl_require=True # Heroku/Render PostgreSQL URLs typically require SSL
         )
     }
 
@@ -145,21 +151,25 @@ LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
-# --- CSRF Trusted Origins for Heroku ---
+# --- CSRF Trusted Origins for Heroku, Render, and custom domains ---
 CSRF_TRUSTED_ORIGINS = []
 
 # Allow all Heroku subdomains (including the one with the hash)
 CSRF_TRUSTED_ORIGINS.append('https://*.herokuapp.com')
 
-# Add custom domains with HTTPS
-CSRF_TRUSTED_ORIGINS.append('https://tonythecoder.com')
-CSRF_TRUSTED_ORIGINS.append('https://www.tonythecoder.com')
-
-# If HEROKU_APP_NAME is set, also explicitly add the app-specific domain
+# Add explicit Heroku app domain if HEROKU_APP_NAME is set
 if HEROKU_APP_NAME:
     CSRF_TRUSTED_ORIGINS.append(f'https://{HEROKU_APP_NAME}.herokuapp.com')
     # If you use a custom domain on Heroku, its canonical host might be herokudns.com
     CSRF_TRUSTED_ORIGINS.append(f'https://{HEROKU_APP_NAME}.herokudns.com')
+
+# Add Render deployment host if RENDER_EXTERNAL_HOSTNAME is set
+if RENDER_EXTERNAL_HOSTNAME:
+    CSRF_TRUSTED_ORIGINS.append(f'https://{RENDER_EXTERNAL_HOSTNAME}')
+
+# Add custom domains with HTTPS
+CSRF_TRUSTED_ORIGINS.append('https://tonythecoder.com')
+CSRF_TRUSTED_ORIGINS.append('https://www.tonythecoder.com')
 
 
 # --- Django-Vite Settings ---
