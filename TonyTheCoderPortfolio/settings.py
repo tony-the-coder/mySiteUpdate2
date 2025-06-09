@@ -17,10 +17,9 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "fallback-insecure-key-for-dev"
 DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
 
 # --- ALLOWED_HOSTS for Heroku and custom domains ---
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['ttc-portfolio-49dd8f292b3b.herokuapp.com']
 
 # Allow all Heroku subdomains (including the one with the hash like ttc-portfolio-49dd8f292b3b.herokuapp.com)
-ALLOWED_HOSTS.append('*.herokuapp.com')
 
 # Also explicitly add the base Heroku app name if HEROKU_APP_NAME is set
 HEROKU_APP_NAME = os.environ.get('HEROKU_APP_NAME')
