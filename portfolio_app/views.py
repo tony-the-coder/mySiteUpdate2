@@ -444,6 +444,6 @@ class CertificateSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'description', 'credential_url'] # Add other fields you need
 
 # API view to list certificates
-class CertificateViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Certificate.objects.all().order_by('order') # Order them by the 'order' field
+class CertificateListAPIView(generics.ListAPIView):
+    queryset = Certificate.objects.all()
     serializer_class = CertificateSerializer

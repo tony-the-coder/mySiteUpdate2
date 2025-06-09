@@ -276,15 +276,16 @@ class Certificate(models.Model):
     issue_date = models.DateField(null=True, blank=True)
     credential_id = models.CharField(max_length=100, blank=True, null=True)
     credential_url = models.URLField(max_length=200, blank=True, null=True)
-    image = models.ImageField(upload_to='certificates/', blank=True, null=True)
+    image = models.ImageField(upload_to='certificates/', blank=True, null=True) # If you want to store images
     order = models.IntegerField(default=0, help_text="Order in which certificates are displayed")
 
     class Meta:
-        # This line must be 'ordering', not 'order'. It is correct here.
         ordering = ['order', 'issue_date', 'title']
 
     def __str__(self):
         return self.title
 
     def save(self, *args, **kwargs):
+        # Optionally, if you use a slug in URLs for certificates
+        # self.slug = slugify(self.title)
         super().save(*args, **kwargs)
