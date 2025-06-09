@@ -1,11 +1,10 @@
-// ... (rest of vite.config.js)
 import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react'; // Corrected import for standard @vitejs/plugin-react
 import { resolve } from 'path';
 
 export default defineConfig({
   plugins: [react()],
   build: {
-    // Your existing build configuration
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'src/main.tsx'), // Your main entry
