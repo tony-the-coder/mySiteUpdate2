@@ -14,7 +14,7 @@ dotenv.load_dotenv(dotenv_path=env_path)
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "fallback-insecure-key-for-dev")
 
 # The DEBUG variable will be 'False' in production and 'True' locally
-DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
+DEBUG = (os.environ.get("DJANGO_DEBUG", "False").lower() == "true")
 
 # --- ALLOWED_HOSTS for Heroku, Render, and custom domains ---
 ALLOWED_HOSTS = ['ttc-portfolio-49dd8f292b3b.herokuapp.com']
