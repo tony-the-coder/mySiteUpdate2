@@ -268,7 +268,25 @@ class ContactInquiry(models.Model):
         verbose_name_plural = "Contact Inquiries"
         ordering = ['-submitted_at']
 
-# Note: Models like Customer, Project (internal construction project), Vendor, Expense, etc.,
-# from the original Lehman site have been removed as they are not typically needed
-# for a personal developer portfolio. If you intend to manage freelance clients
-# and their projects through this site, you might re-introduce simplified versions later.
+
+class Certificate(models.Model):
+    title = models.CharField(max_length=200, help_text="Name of the certificate or course.")
+    description = models.TextField(blank=True, help_text="Description of the certificate.")
+    issued_by = models.CharField(max_length=200, help_text="Organization or platform that issued the certificate.")
+    issued_date = models.DateField(null=True, blank=True, help_text="Date the certificate was issued.")
+    credential_id = models.CharField(max_length=100, blank=True, help_text="Unique ID for the certificate (if applicable).")
+    credential_url = models.URLField(max_length=255, blank=True, help_text="Link to the certificate or course page.")
+    image = models.ImageField(upload_to='certificates/', null=True, blank=True, help_text="Optional image of the certificate.")
+    order = models.IntegerField(default=0, help_text="Order for display (lower numbers show first).")
+
+    class Meta:
+        order = ['order', 'issued_date']
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.credential_id:
+            super().save(*args, **kwargs)
+
+

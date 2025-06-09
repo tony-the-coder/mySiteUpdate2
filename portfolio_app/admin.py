@@ -12,6 +12,7 @@ from .models import (
     BlogCategory,
     BlogPost,
     ContactInquiry,
+    Certificate,
     # ActivityLog # Optional: Uncomment to keep and register ActivityLog
 )
 # Import the new widget for CKEditor 5
@@ -171,4 +172,9 @@ class ContactInquiryAdmin(admin.ModelAdmin):
     readonly_fields = ('name','email','phone_number','subject','message','submitted_at', 'updated_at')
     fields = ('name', 'email', 'phone_number', 'subject', 'message', 'status', 'internal_notes', 'submitted_at', 'updated_at')
 
-# ... (Optional ActivityLogAdmin and comments about removed models remain the same) ...
+
+@admin.register(Certificate)
+class CertificateAdmin(admin.ModelAdmin):
+    list_display = ('title', 'issued_by', 'issued_date', 'order')
+    list_editable = ('order',)
+    search_fields = ('title', 'description', 'issued_by')

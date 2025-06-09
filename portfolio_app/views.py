@@ -4,7 +4,9 @@
 import json
 import logging
 import os
-
+from rest_framework import generics
+from rest_framework import serializers
+from .models import Certificate
 # --- Django Imports ---
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -431,3 +433,14 @@ def staff_manage_portfolio_images(request, pk):
         "is_staff_portal": True,
     }
     return render(request, "portfolio_app/staff/manage_portfolio_images.html", context)
+
+
+class CertificateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Certificate
+        fields = ['title', 'description', 'credential_url'] # Add other fields you need
+
+# API view to list certificates
+class CertificateListAPIView(generics.ListAPIView):
+    queryset = Certificate.objects.all()
+    serializer_class = CertificateSerializer
