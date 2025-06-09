@@ -2,7 +2,7 @@
 import os
 from django.db import models
 from django.utils import timezone
-from django.conf import settings # For BlogPost author
+from django.conf import settings
 from django.utils.text import slugify
 from django.utils.html import mark_safe
 from django.urls import reverse
@@ -40,8 +40,6 @@ class PortfolioCategory(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        # This URL might be used by Django admin or sitemaps.
-        # If React handles all category filtering client-side, it might not be used on the public site.
         return reverse('portfolio_app:portfolio_projects_by_category', kwargs={'category_slug': self.slug})
 
     class Meta:
@@ -54,7 +52,7 @@ class PortfolioProject(models.Model):  # For Your Coding Projects
     categories = models.ManyToManyField(
         PortfolioCategory,
         blank=True,
-        related_name='portfolio_projects', # Default related_name, good
+        related_name='portfolio_projects',
         help_text="Select one or more categories/tech stacks for this project (e.g., Python, React, AI)."
     )
     title = models.CharField(max_length=255, help_text="Name of your coding project.")
@@ -68,7 +66,7 @@ class PortfolioProject(models.Model):  # For Your Coding Projects
         blank=True,
         help_text="A brief 1-2 sentence summary for list views or cards (used for meta descriptions too)."
     )
-    details = models.TextField( # For CKEditor in admin/forms
+    details = models.TextField(
         help_text="Detailed description: project goals, challenges, solutions, your role, learnings."
     )
     technologies_used = models.CharField(
@@ -95,7 +93,7 @@ class PortfolioProject(models.Model):  # For Your Coding Projects
         blank=True,
         help_text="Current status of this coding project."
     )
-    year_completed = models.PositiveIntegerField( # Kept this as it can be relevant for coding projects
+    year_completed = models.PositiveIntegerField(
         null=True, blank=True, help_text="Year the project was primarily developed or completed."
     )
 
@@ -120,26 +118,18 @@ class PortfolioProject(models.Model):  # For Your Coding Projects
         return self.title
 
     def get_absolute_url(self):
-        # This might be used for sitemaps or if you decide to have a fallback Django detail view.
-        # If React handles all routing client-side for project details, this could simply be:
-        # return self.live_demo_url or self.github_url or f"/portfolio/#{self.slug}"
-        # For now, let's assume a potential (even if unused) Django detail view for the 'portfolio_app'
-        # This will need a corresponding URL pattern named 'portfolio_project_detail_django'.
-        # If your React app takes over the /portfolio/ route, this won't be hit directly by users.
         try:
             return reverse('portfolio_app:portfolio_project_detail_django', kwargs={'slug': self.slug})
-        except Exception: # Avoid errors if the URL is not defined
+        except Exception:
             return "#"
 
-
-    def get_first_image_url(self): # For API and templates
+    def get_first_image_url(self):
         if self.featured_image and hasattr(self.featured_image, 'url'):
             return self.featured_image.url
-        # Ensure 'images' related_name is correct and refers to PortfolioImage model
         first_gallery_image = self.images.filter(image__isnull=False).exclude(image__exact='').order_by('order', 'uploaded_at').first()
         if first_gallery_image and first_gallery_image.image and hasattr(first_gallery_image.image, 'url'):
             return first_gallery_image.image.url
-        return None # Or return static('portfolio_app/images/default_project.png')
+        return None
 
     class Meta:
         verbose_name = "Coding Project"
@@ -151,7 +141,7 @@ class PortfolioImage(models.Model):
     portfolio_project = models.ForeignKey(
         PortfolioProject,
         on_delete=models.CASCADE,
-        related_name='images' # This matches get_first_image_url above
+        related_name='images'
     )
     image = models.ImageField(upload_to=get_portfolio_image_upload_path)
     caption = models.CharField(max_length=255, blank=True, help_text="Optional caption (e.g., specific feature screenshot).")
@@ -213,7 +203,7 @@ class BlogPost(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
-        null=True, blank=True, # Allow admin to create posts without assigning author if needed
+        null=True, blank=True,
         related_name='blog_posts'
     )
     published_date = models.DateTimeField(null=True, blank=True, db_index=True, help_text="Set date to make post live (if status='Published'). Auto-set if published and date is blank.")
@@ -268,25 +258,33 @@ class ContactInquiry(models.Model):
         verbose_name_plural = "Contact Inquiries"
         ordering = ['-submitted_at']
 
+# Ensure this 'Project' model is only defined once and is correct
+class Project(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    # Add other fields as necessary for your projects
+    # image = models.ImageField(upload_to='projects/', blank=True, null=True)
 
+    def __str__(self):
+        return self.title
+
+# The Certificate model that should be present and correct
 class Certificate(models.Model):
-    title = models.CharField(max_length=200, help_text="Name of the certificate or course.")
-    description = models.TextField(blank=True, help_text="Description of the certificate.")
-    issued_by = models.CharField(max_length=200, help_text="Organization or platform that issued the certificate.")
-    issued_date = models.DateField(null=True, blank=True, help_text="Date the certificate was issued.")
-    credential_id = models.CharField(max_length=100, blank=True, help_text="Unique ID for the certificate (if applicable).")
-    credential_url = models.URLField(max_length=255, blank=True, help_text="Link to the certificate or course page.")
-    image = models.ImageField(upload_to='certificates/', null=True, blank=True, help_text="Optional image of the certificate.")
-    order = models.IntegerField(default=0, help_text="Order for display (lower numbers show first).")
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    issuing_body = models.CharField(max_length=200, blank=True)
+    issue_date = models.DateField(null=True, blank=True)
+    credential_id = models.CharField(max_length=100, blank=True, null=True)
+    credential_url = models.URLField(max_length=200, blank=True, null=True)
+    image = models.ImageField(upload_to='certificates/', blank=True, null=True)
+    order = models.IntegerField(default=0, help_text="Order in which certificates are displayed")
 
     class Meta:
-        order = ['order', 'issued_date']
+        # This line must be 'ordering', not 'order'. It is correct here.
+        ordering = ['order', 'issue_date', 'title']
 
     def __str__(self):
         return self.title
 
     def save(self, *args, **kwargs):
-        if not self.credential_id:
-            super().save(*args, **kwargs)
-
-
+        super().save(*args, **kwargs)

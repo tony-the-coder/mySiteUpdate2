@@ -1,24 +1,16 @@
-import { HoverEffect } from "@/components/ui/card-hover-effect"; // This path is correct due to tsconfig.json
+// reactland/src/components/ui/card-hover-effect-demo.tsx
+import { HoverEffect } from "@/components/ui/card-hover-effect";
 
-// This will be replaced with data fetched from Django
-export const projects = [
-  {
-    title: "Example Cert 1",
-    description: "Description for example certificate 1.",
-    link: "#",
-  },
-  {
-    title: "Example Cert 2",
-    description: "Description for example certificate 2.",
-    link: "#",
-  },
-  // Add more example items here or fetch dynamically
-];
+interface CardItem {
+  title: string;
+  description: string;
+  link: string;
+}
 
-export default function CardHoverEffectDemo() {
+export default function CardHoverEffectDemo({ items }: { items: CardItem[] }) {
   return (
     <div className="max-w-5xl mx-auto px-8">
-      <HoverEffect items={projects} />
+      <HoverEffect items={items} />
     </div>
   );
 }

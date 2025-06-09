@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% load django_vite %} {# Make sure django_vite is loaded for React integration #}
+{% load django_vite %}
 
 {% block title %}About Me - Tony the Coder{% endblock %}
 
@@ -138,5 +138,6 @@
 {% block extra_js %}
     {{ block.super }} {# Important to keep any parent JS (like Alpine.js or Flowbite) #}
     {% vite_react_refresh %} {# For hot module reloading in development #}
-    {% vite_asset 'aboutPageEntry.tsx' %} {# This loads the specific JS bundle for this page #}
+    {% vite_asset 'aboutPageEntry.tsx' %} {# This loads the specific JS bundle for the LampDemo #}
+    {% vite_asset 'certificatesEntry.tsx' %} {# ADD THIS LINE to load the certificates React component #}
 {% endblock extra_js %}

@@ -175,6 +175,6 @@ class ContactInquiryAdmin(admin.ModelAdmin):
 
 @admin.register(Certificate)
 class CertificateAdmin(admin.ModelAdmin):
-    list_display = ('title', 'issued_by', 'issued_date', 'order')
+    list_display = ('title', 'issuing_body', 'issue_date', 'order', 'credential_url')
     list_editable = ('order',)
-    search_fields = ('title', 'description', 'issued_by')
+    search_fields = ('title', 'description', 'issuing_body')

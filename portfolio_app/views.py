@@ -20,6 +20,9 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import strip_tags
 from django.utils.text import Truncator
+from django.shortcuts import render
+from rest_framework import generics, serializers, viewsets
+from .models import Certificate, Project
 
 # --- Third Party Imports ---
 try:
@@ -438,9 +441,9 @@ def staff_manage_portfolio_images(request, pk):
 class CertificateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Certificate
-        fields = ['title', 'description', 'credential_url'] # Add other fields you need
+        fields = ['id', 'title', 'description', 'credential_url'] # Add other fields you need
 
 # API view to list certificates
-class CertificateListAPIView(generics.ListAPIView):
-    queryset = Certificate.objects.all()
+class CertificateViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Certificate.objects.all().order_by('order') # Order them by the 'order' field
     serializer_class = CertificateSerializer
