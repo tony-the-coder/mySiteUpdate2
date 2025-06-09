@@ -4,7 +4,7 @@ from pathlib import Path
 import dotenv
 import dj_database_url
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Build paths inside the project like this: BASE_DIR / 'subdir'. Force Trigger
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Load .env file for local development
