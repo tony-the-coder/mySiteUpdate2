@@ -16,13 +16,22 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "fallback-insecure-key-for-dev"
 # The DEBUG variable will be 'False' on Render and 'True' locally
 DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
 
+# --- ALLOWED_HOSTS for Heroku and custom domains ---
 ALLOWED_HOSTS = []
 
-# --- ADD RENDER DEPLOYMENT HOST ---
-# This is the hostname Render will assign to your app.
-RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-if RENDER_EXTERNAL_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+# Add Heroku's dynamic hostname if available
+HEROKU_APP_NAME = os.environ.get('HEROKU_APP_NAME')
+if HEROKU_APP_NAME:
+    ALLOWED_HOSTS.append(f'{HEROKU_APP_NAME}.herokuapp.com')
+
+# Add your custom domains
+ALLOWED_HOSTS.append('tonythecoder.com')
+ALLOWED_HOSTS.append('www.tonythecoder.com')
+
+# Optionally, for local development with DEBUG=True, you might include localhost, etc.
+# if DEBUG:
+#    ALLOWED_HOSTS.append('127.0.0.1')
+#    ALLOWED_HOSTS.append('localhost')
 
 
 # Application definition
@@ -65,7 +74,7 @@ TEMPLATES = [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
+                "django.template.context_processors.messages",
             ],
         },
     },
@@ -75,7 +84,7 @@ WSGI_APPLICATION = "TonyTheCoderPortfolio.wsgi.application"
 
 
 # --- DATABASE CONFIGURATION ---
-# Uses SQLite locally and PostgreSQL in production (on Render)
+# Uses SQLite locally and PostgreSQL in production (on Heroku)
 if DEBUG:
     DATABASES = {
         "default": {
@@ -84,11 +93,11 @@ if DEBUG:
         }
     }
 else:
-    # This reads the DATABASE_URL environment variable provided by Render
+    # This reads the DATABASE_URL environment variable provided by Heroku
     DATABASES = {
         'default': dj_database_url.config(
             conn_max_age=600,
-            ssl_require=True
+            ssl_require=True # Heroku PostgreSQL URLs typically require SSL
         )
     }
 
@@ -134,12 +143,18 @@ LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
-# --- CSRF Trusted Origins for Render ---
-# This is required for secure form submissions on the live site
-if RENDER_EXTERNAL_HOSTNAME:
-    CSRF_TRUSTED_ORIGINS = [
-        f'https://{RENDER_EXTERNAL_HOSTNAME}'
-    ]
+# --- CSRF Trusted Origins for Heroku ---
+CSRF_TRUSTED_ORIGINS = []
+
+if HEROKU_APP_NAME:
+    CSRF_TRUSTED_ORIGINS.append(f'https://{HEROKU_APP_NAME}.herokuapp.com')
+    # If you use a custom domain on Heroku, its canonical host might be herokudns.com
+    CSRF_TRUSTED_ORIGINS.append(f'https://{HEROKU_APP_NAME}.herokudns.com')
+
+# Add your custom domains with HTTPS
+CSRF_TRUSTED_ORIGINS.append('https://tonythecoder.com')
+CSRF_TRUSTED_ORIGINS.append('https://www.tonythecoder.com')
+
 
 # --- Django-Vite Settings ---
 DJANGO_VITE = {
