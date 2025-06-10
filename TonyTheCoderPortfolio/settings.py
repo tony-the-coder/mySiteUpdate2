@@ -17,84 +17,84 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "fallback-insecure-key-for-dev"
 DEBUG = (os.environ.get("DJANGO_DEBUG", "FALSE").lower() == "true")
 
 # --- ALLOWED_HOSTS for Heroku, Render, and custom domains ---
-ALLOWED_HOSTS = ['ttc-portfolio-49dd8f292b3b.herokuapp.com'] #
+ALLOWED_HOSTS = ['ttc-portfolio-49dd8f292b3b.herokuapp.com']
 
 # Allow all Heroku subdomains (like ttc-portfolio-XXXX.herokuapp.com)
-ALLOWED_HOSTS.append('*.herokuapp.com') #
+ALLOWED_HOSTS.append('*.herokuapp.com')
 
 # Explicitly add the base Heroku app name if HEROKU_APP_NAME is set
-HEROKU_APP_NAME = os.environ.get('HEROKU_APP_NAME') #
+HEROKU_APP_NAME = os.environ.get('HEROKU_APP_NAME')
 if HEROKU_APP_NAME:
-    ALLOWED_HOSTS.append(f'{HEROKU_APP_NAME}.herokuapp.com') #
+    ALLOWED_HOSTS.append(f'{HEROKU_APP_NAME}.herokuapp.com')
 
 # Add Render deployment host if RENDER_EXTERNAL_HOSTNAME is set
-RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME') #
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME) #
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # Add your custom domains
-ALLOWED_HOSTS.append('tonythecoder.com') #
-ALLOWED_HOSTS.append('www.tonythecoder.com') #
+ALLOWED_HOSTS.append('tonythecoder.com')
+ALLOWED_HOSTS.append('www.tonythecoder.com')
 
 # Optionally, for local development with DEBUG=True, you might include localhost, etc.
-if DEBUG: #
+if DEBUG:
     ALLOWED_HOSTS.append('127.0.0.1')
     ALLOWED_HOSTS.append('localhost')
 
 
 # Application definition
 INSTALLED_APPS = [
-    "django.contrib.admin", #
-    "django.contrib.auth", #
-    "django.contrib.contenttypes", #
-    "django.contrib.sessions", #
-    "django.contrib.messages", #
-    "whitenoise.runserver_nostatic", #
-    "django.contrib.staticfiles", #
-    "django.contrib.humanize", #
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "whitenoise.runserver_nostatic",
+    "django.contrib.staticfiles",
+    "django.contrib.humanize",
     # Third-party apps
-    "django_ckeditor_5", #
-    "django_vite", #
+    "django_ckeditor_5",
+    "django_vite",
+    "storages", # Add django-storages here
     # Your apps
-    "portfolio_app", #
-    'rest_framework', #
+    "portfolio_app",
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware", #
-    "whitenoise.middleware.WhiteNoiseMiddleware", #
-    "django.contrib.sessions.middleware.SessionMiddleware", #
-    "django.middleware.common.CommonMiddleware", #
-    "django.middleware.csrf.CsrfViewMiddleware", #
-    "django.contrib.auth.middleware.AuthenticationMiddleware", #
-    "django.contrib.messages.middleware.MessageMiddleware", #
-    "django.middleware.clickjacking.XFrameOptionsMiddleware", #
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "TonyTheCoderPortfolio.urls" #
+ROOT_URLCONF = "TonyTheCoderPortfolio.urls"
 
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates", #
-        "DIRS": [BASE_DIR / "templates"], #
-        "APP_DIRS": True, #
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],
+        "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
-                "django.template.context_processors.debug", #
-                "django.template.context_processors.request", #
-                "django.contrib.auth.context_processors.auth", #
-                "django.contrib.messages.context_processors.messages", #
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = "TonyTheCoderPortfolio.wsgi.application" #
+WSGI_APPLICATION = "TonyTheCoderPortfolio.wsgi.application"
 
 
 # --- DATABASE CONFIGURATION ---
 # Uses SQLite locally and PostgreSQL in production (on Heroku or Render)
-# CORRECTED DATABASE CONFIGURATION:
 DATABASE_URL = os.environ.get('DATABASE_URL')
 if DATABASE_URL:
     DATABASES = {
@@ -116,73 +116,105 @@ else:
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"}, #
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"}, #
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"}, #
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"}, #
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 # Internationalization
-LANGUAGE_CODE = "en-us" #
-TIME_ZONE = "America/New_York" #
-USE_I18N = True #
-USE_TZ = True #
+LANGUAGE_CODE = "en-us"
+TIME_ZONE = "America/New_York"
+USE_I18N = True
+USE_TZ = True
 
 # --- STATIC & MEDIA FILES ---
-STATIC_URL = "/static/" #
-MEDIA_URL = "/media/" #
+STATIC_URL = "/static/"
+MEDIA_URL = "/media/" # This will be overridden by the S3 MEDIA_URL if DEBUG is False
 
 # This is where `collectstatic` will gather all static files for deployment.
-STATIC_ROOT = BASE_DIR / "staticfiles" #
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Tell WhiteNoise to use a more efficient storage backend in production
-if not DEBUG: #
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage" #
+if not DEBUG:
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # This directory is for your source static files (which Vite also uses)
 STATICFILES_DIRS = [
-    BASE_DIR / "assets", #
-    BASE_DIR / "assets" / "vite" #
+    BASE_DIR / "assets",
+    BASE_DIR / "assets" / "vite"
 ]
 
-# Media files (User-uploaded content)
-MEDIA_ROOT = BASE_DIR / "media/" #
+# Media files (User-uploaded content) - used when DEBUG is True
+MEDIA_ROOT = BASE_DIR / "media/"
 
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField" #
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # --- Authentication Settings ---
-LOGIN_URL = "/accounts/login/" #
-LOGIN_REDIRECT_URL = "/" #
-LOGOUT_REDIRECT_URL = "/" #
+LOGIN_URL = "/accounts/login/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
 
 # --- CSRF Trusted Origins for Heroku, Render, and custom domains ---
-CSRF_TRUSTED_ORIGINS = [] #
+CSRF_TRUSTED_ORIGINS = []
 
 # Allow all Heroku subdomains (including the one with the hash)
-CSRF_TRUSTED_ORIGINS.append('https://*.herokuapp.com') #
+CSRF_TRUSTED_ORIGINS.append('https://*.herokuapp.com')
 
 # Add explicit Heroku app domain if HEROKU_APP_NAME is set
-if HEROKU_APP_NAME: #
-    CSRF_TRUSTED_ORIGINS.append(f'https://{HEROKU_APP_NAME}.herokuapp.com') #
+if HEROKU_APP_NAME:
+    CSRF_TRUSTED_ORIGINS.append(f'https://{HEROKU_APP_NAME}.herokuapp.com')
     # If you use a custom domain on Heroku, its canonical host might be herokudns.com
-    CSRF_TRUSTED_ORIGINS.append(f'https://{HEROKU_APP_NAME}.herokudns.com') #
+    CSRF_TRUSTED_ORIGINS.append(f'https://{HEROKU_APP_NAME}.herokudns.com')
 
 # Add Render deployment host if RENDER_EXTERNAL_HOSTNAME is set
-if RENDER_EXTERNAL_HOSTNAME: #
-    CSRF_TRUSTED_ORIGINS.append(f'https://{RENDER_EXTERNAL_HOSTNAME}') #
+if RENDER_EXTERNAL_HOSTNAME:
+    CSRF_TRUSTED_ORIGINS.append(f'https://{RENDER_EXTERNAL_HOSTNAME}')
 
 # Add custom domains with HTTPS
-CSRF_TRUSTED_ORIGINS.append('https://tonythecoder.com') #
-CSRF_TRUSTED_ORIGINS.append('https://www.tonythecoder.com') #
+CSRF_TRUSTED_ORIGINS.append('https://tonythecoder.com')
+CSRF_TRUSTED_ORIGINS.append('https://www.tonythecoder.com')
 
 
 # --- Django-Vite Settings ---
 DJANGO_VITE = {
     "default": {
-        # REMOVED: "build_dir": BASE_DIR / "assets" / "vite",
         "manifest_path": BASE_DIR / "assets" / "vite" / ".vite" / "manifest.json",
-        "dev_server_port": 5173, #
-        "dev_server_host": "localhost", #
-        "static_url_prefix": "", #
+        "dev_server_port": 5173,
+        "dev_server_host": "localhost",
+        "static_url_prefix": "",
     }
 }
+
+# --- AH S3 Object Storage (Stackhero MinIO) Configuration for Media Files ---
+# Only configure for production (when DEBUG is False)
+if not DEBUG:
+    # Retrieve credentials from Heroku Config Vars
+    STACKHERO_MINIO_HOST = os.environ.get('STACKHERO_MINIO_HOST')
+    STACKHERO_MINIO_ACCESS_KEY = os.environ.get('STACKHERO_MINIO_ACCESS_KEY')
+    STACKHERO_MINIO_SECRET_KEY = os.environ.get('STACKHERO_MINIO_SECRET_KEY')
+    S3_BUCKET_NAME = os.environ.get('STACKHERO_MINIO_BUCKET_NAME') # This will now be 'certs'
+
+    if all([STACKHERO_MINIO_HOST, STACKHERO_MINIO_ACCESS_KEY, STACKHERO_MINIO_SECRET_KEY, S3_BUCKET_NAME]):
+        # Map Stackhero's MinIO variables to django-storages's AWS S3 parameters
+        AWS_S3_ENDPOINT_URL = f'https://{STACKHERO_MINIO_HOST}'
+        AWS_ACCESS_KEY_ID = STACKHERO_MINIO_ACCESS_KEY
+        AWS_SECRET_ACCESS_KEY = STACKHERO_MINIO_SECRET_KEY
+        AWS_STORAGE_BUCKET_NAME = S3_BUCKET_NAME
+        AWS_S3_REGION_NAME = 'us-east-1' # Generic region, often acceptable for S3-compatible services
+
+        # Set DEFAULT_FILE_STORAGE to use django-storages's S3 backend for media files
+        DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+        # Define the URL for your media files to point to your S3-compatible bucket
+        MEDIA_URL = f'{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/'
+
+        # Optional: Recommended additional settings for S3-compatible storage
+        AWS_S3_FILE_OVERWRITE = False # Prevents overwriting files with the same name
+        AWS_DEFAULT_ACL = 'public-read' # Grants public read access to uploaded files (adjust if private)
+        AWS_S3_SIGNATURE_VERSION = 's3v4' # Use S3v4 signature for modern S3 APIs
+        AWS_QUERYSTRING_AUTH = False # Don't include auth parameters in generated URLs (cleaner URLs)
+        AWS_S3_VERIFY = True # Verify SSL certificates
+
+    else:
+        print("WARNING: AH S3 Object Storage (Stackhero) environment variables not fully set. Media files may not be stored correctly in production.")
