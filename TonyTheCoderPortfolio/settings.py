@@ -189,19 +189,20 @@ DJANGO_VITE = {
 # --- AH S3 Object Storage (Stackhero MinIO) Configuration for Media Files ---
 # Only configure for production (when DEBUG is False)
 if not DEBUG:
-    # Retrieve credentials from Heroku Config Vars
-    STACKHERO_MINIO_HOST = os.environ.get('STACKHERO_MINIO_HOST')
-    STACKHERO_MINIO_ACCESS_KEY = os.environ.get('STACKHERO_MINIO_ACCESS_KEY')
-    STACKHERO_MINIO_SECRET_KEY = os.environ.get('STACKHERO_MINIO_SECRET_KEY')
-    S3_BUCKET_NAME = os.environ.get('STACKHERO_MINIO_BUCKET_NAME') # This will now be 'certs'
+    # Retrieve credentials from Heroku Config Vars using their EXACT names from the screenshot
+    STACKHERO_MINIO_HOST_ENV = os.environ.get('AH_S3_OBJECT_STORAGE_STACKHERO_CYAN_HOST') # Matches screenshot
+    STACKHERO_MINIO_ACCESS_KEY_ENV = os.environ.get('AH_S3_OBJECT_STORAGE_STACKHERO_CYAN_ROOT_ACCESS_KEY') # Matches screenshot
+    STACKHERO_MINIO_SECRET_KEY_ENV = os.environ.get('AH_S3_OBJECT_STORAGE_STACKHERO_CYAN_ROOT_SECRET_KEY') # Matches screenshot
+    S3_BUCKET_NAME = os.environ.get('STACKHERO_MINIO_BUCKET_NAME') # This one should still be 'certs' as you set it.
 
-    if all([STACKHERO_MINIO_HOST, STACKHERO_MINIO_ACCESS_KEY, STACKHERO_MINIO_SECRET_KEY, S3_BUCKET_NAME]):
+    # Ensure all required variables are present before attempting S3 configuration
+    if all([STACKHERO_MINIO_HOST_ENV, STACKHERO_MINIO_ACCESS_KEY_ENV, STACKHERO_MINIO_SECRET_KEY_ENV, S3_BUCKET_NAME]):
         # Map Stackhero's MinIO variables to django-storages's AWS S3 parameters
-        AWS_S3_ENDPOINT_URL = f'https://{STACKHERO_MINIO_HOST}'
-        AWS_ACCESS_KEY_ID = STACKHERO_MINIO_ACCESS_KEY
-        AWS_SECRET_ACCESS_KEY = STACKHERO_MINIO_SECRET_KEY
+        AWS_S3_ENDPOINT_URL = f'https://{STACKHERO_MINIO_HOST_ENV}'
+        AWS_ACCESS_KEY_ID = STACKHERO_MINIO_ACCESS_KEY_ENV
+        AWS_SECRET_ACCESS_KEY = STACKHERO_MINIO_SECRET_KEY_ENV
         AWS_STORAGE_BUCKET_NAME = S3_BUCKET_NAME
-        AWS_S3_REGION_NAME = 'us-east-1' # Generic region, often acceptable for S3-compatible services
+        AWS_S3_REGION_NAME = 'us-east-1' # Generic region, often acceptable
 
         # Set DEFAULT_FILE_STORAGE to use django-storages's S3 backend for media files
         DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
@@ -210,11 +211,12 @@ if not DEBUG:
         MEDIA_URL = f'{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/'
 
         # Optional: Recommended additional settings for S3-compatible storage
-        AWS_S3_FILE_OVERWRITE = False # Prevents overwriting files with the same name
-        AWS_DEFAULT_ACL = 'public-read' # Grants public read access to uploaded files (adjust if private)
-        AWS_S3_SIGNATURE_VERSION = 's3v4' # Use S3v4 signature for modern S3 APIs
-        AWS_QUERYSTRING_AUTH = False # Don't include auth parameters in generated URLs (cleaner URLs)
-        AWS_S3_VERIFY = True # Verify SSL certificates
+        AWS_S3_FILE_OVERWRITE = False
+        AWS_DEFAULT_ACL = 'public-read' # Grants public read access (adjust if private)
+        AWS_S3_SIGNATURE_VERSION = 's3v4'
+        AWS_QUERYSTRING_AUTH = False
+        AWS_S3_VERIFY = True
 
     else:
-        print("WARNING: AH S3 Object Storage (Stackhero) environment variables not fully set. Media files may not be stored correctly in production.")
+        # This print statement is inside your settings.py
+        print("WARNING: AH S3 Object Storage (Stackhero) environment variables NOT FOUND. Media files will use local storage if DEBUG is False.")
