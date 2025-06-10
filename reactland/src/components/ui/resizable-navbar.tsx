@@ -121,13 +121,24 @@ export const MobileNavToggle = ({ isOpen, onClick }: { isOpen: boolean; onClick:
     isOpen ? <IconX className="text-black dark:text-white" onClick={onClick} /> : <IconMenu2 className="text-black dark:text-white" onClick={onClick} />
 );
 
-export const NavbarLogo = ({ visible }: { visible?: boolean; }) => (
-    <a href="/" className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal">
-        <span className={cn("font-medium transition-colors", visible ? "text-black dark:text-white" : "text-white dark:text-white")}>
-            Tony the Coder
-        </span>
+export const NavbarLogo = () => {
+  return (
+    <a href="/" className="relative flex items-center space-x-2">
+      <img
+        src="src/assets/ttc-logo.png"
+        alt="Tony the Coder Logo"
+        className={cn(
+          "h-10 w-auto transition-all duration-200",
+          "dark:filter dark:invert"
+        )}
+      />
+
+   <span className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
+        Tony the Coder
+      </span>
     </a>
-);
+  );
+};
 
 
 // --- NEW, SIMPLIFIED NAVBARBUTTON COMPONENT ---

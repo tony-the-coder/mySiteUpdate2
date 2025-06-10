@@ -8,9 +8,14 @@
 /dataSources/
 /dataSources.local.xml
 /db.sqlite3
-
+/staticfiles/
+/media/
+staticfiles/
 /frontend/src/assets/react.svg
 /frontend/public/vite.svg
 /frontend/frontend/
 
 node_modules
+/portfolio_app/migrations/0002_certificate_project.py
+
+/staticfiles/

@@ -58,9 +58,8 @@
     </script>
 
   {% block extra_js %}
-    {# This loads the JavaScript for our React navbar component #}
-      {% vite_react_refresh %}
-    {% vite_asset 'navbarEntry.tsx' %}
+    {% vite_react_refresh %}
+    {% vite_asset 'src/navbarEntry.tsx' %}
 {% endblock %}
 </body>
 </html>
