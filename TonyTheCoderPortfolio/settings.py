@@ -203,7 +203,7 @@ if not DEBUG:
         AWS_ACCESS_KEY_ID = MINIO_APP_ACCESS_KEY
         AWS_SECRET_ACCESS_KEY = MINIO_APP_SECRET_KEY
         AWS_STORAGE_BUCKET_NAME = S3_BUCKET_NAME
-        AWS_S3_REGION_NAME = 'us-east-1' # Generic region, often acceptable
+        AWS_S3_REGION_NAME = 'us-east-1'
 
         # Set DEFAULT_FILE_STORAGE to use django-storages's S3 backend for media files
         DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
