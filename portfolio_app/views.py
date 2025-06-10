@@ -44,6 +44,8 @@ from .models import (
     ContactInquiry,
     PortfolioImage,
     PortfolioProject,
+    Certificate,
+    Project
 )
 
 logger = logging.getLogger(__name__)
@@ -440,10 +442,9 @@ def staff_manage_portfolio_images(request, pk):
 
 class CertificateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Certificate
-        fields = ['id', 'title', 'description', 'credential_url'] # Add other fields you need
+        model = Certificate# Add other fields you need
 
-# API view to list certificates
-class CertificateListAPIView(generics.ListAPIView):
-    queryset = Certificate.objects.all()
+# Change to ReadOnlyModelViewSet to be used with a router
+class CertificateViewSet(viewsets.ReadOnlyModelViewSet): # Renamed and changed base class
+    queryset = Certificate.objects.all().order_by('order', 'issue_date', 'title')
     serializer_class = CertificateSerializer

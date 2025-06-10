@@ -1,0 +1,1 @@
+import{R as e,j as t,a as r}from"./index.js";import{C as a}from"./ContactUs.js";import"./proxy.js";const o=document.getElementById("react-contact-page-root");o&&e.createRoot(o).render(t.jsx(r.StrictMode,{children:t.jsx(a,{})}));

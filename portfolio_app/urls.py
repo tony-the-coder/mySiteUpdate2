@@ -2,7 +2,7 @@
 from django.urls import path, include
 from rest_framework import routers #
 from . import views #
-from portfolio_app.views import CertificateListAPIView
+from portfolio_app.views import CertificateViewSet
 
 app_name = 'portfolio_app' #
 
@@ -35,6 +35,6 @@ urlpatterns = [
     path('staff/portfolio/<int:pk>/edit/', views.staff_portfolio_edit, name='staff_portfolio_edit'), #
     path('staff/portfolio/<int:pk>/delete/', views.staff_portfolio_delete, name='staff_portfolio_delete'), #
     path('staff/portfolio/<int:pk>/images/', views.staff_manage_portfolio_images, name='staff_manage_portfolio_images'), #
-    path('api/certificates/', CertificateListAPIView.as_view(), name='api_certificates_list'),
+    path('api/', include(router.urls)),
 
 ]

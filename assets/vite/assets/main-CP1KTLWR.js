@@ -1,1 +1,0 @@
-import{R as e,j as t,a as c}from"./index-BjMWrbR9.js";import{C as a}from"./ContactUs-BY8bYjZp.js";const o=document.getElementById("react-contact-form-root");o&&(e.createRoot(o).render(t.jsx(c.StrictMode,{children:t.jsx(a,{})})),console.log("React Contact Us page initialized successfully."));

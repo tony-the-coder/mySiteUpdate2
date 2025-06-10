@@ -1,0 +1,132 @@
+{
+  "_ContactUs.js": {
+    "file": "assets/ContactUs.js",
+    "name": "ContactUs",
+    "imports": [
+      "_index.js",
+      "_proxy.js"
+    ],
+    "dynamicImports": [
+      "src/components/ui/globe.tsx"
+    ]
+  },
+  "_index.css": {
+    "file": "assets/index.css",
+    "src": "_index.css"
+  },
+  "_index.js": {
+    "file": "assets/index.js",
+    "name": "index",
+    "css": [
+      "assets/index.css"
+    ]
+  },
+  "_proxy.js": {
+    "file": "assets/proxy.js",
+    "name": "proxy",
+    "imports": [
+      "_index.js"
+    ]
+  },
+  "_use-scroll.js": {
+    "file": "assets/use-scroll.js",
+    "name": "use-scroll",
+    "imports": [
+      "_index.js",
+      "_proxy.js"
+    ]
+  },
+  "_utils.js": {
+    "file": "assets/utils.js",
+    "name": "utils"
+  },
+  "src/aboutPageEntry.tsx": {
+    "file": "assets/aboutPageEntry.js",
+    "name": "aboutPageEntry",
+    "src": "src/aboutPageEntry.tsx",
+    "isEntry": true,
+    "imports": [
+      "_index.js",
+      "_utils.js",
+      "_proxy.js"
+    ]
+  },
+  "src/certificatesEntry.tsx": {
+    "file": "assets/certificatesEntry.js",
+    "name": "certificatesEntry",
+    "src": "src/certificatesEntry.tsx",
+    "isEntry": true,
+    "imports": [
+      "_index.js",
+      "_utils.js"
+    ]
+  },
+  "src/components/ui/globe.tsx": {
+    "file": "assets/globe.js",
+    "name": "globe",
+    "src": "src/components/ui/globe.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_index.js",
+      "_ContactUs.js",
+      "_proxy.js"
+    ]
+  },
+  "src/contactPageEntry.tsx": {
+    "file": "assets/contactPageEntry.js",
+    "name": "contactPageEntry",
+    "src": "src/contactPageEntry.tsx",
+    "isEntry": true,
+    "imports": [
+      "_index.js",
+      "_ContactUs.js",
+      "_proxy.js"
+    ]
+  },
+  "src/homeHeroEntry.tsx": {
+    "file": "assets/homeHeroEntry.js",
+    "name": "homeHeroEntry",
+    "src": "src/homeHeroEntry.tsx",
+    "isEntry": true,
+    "imports": [
+      "_index.js",
+      "_utils.js",
+      "_proxy.js"
+    ]
+  },
+  "src/main.tsx": {
+    "file": "assets/main.js",
+    "name": "main",
+    "src": "src/main.tsx",
+    "isEntry": true,
+    "imports": [
+      "_index.js",
+      "_ContactUs.js",
+      "_proxy.js"
+    ]
+  },
+  "src/navbarEntry.tsx": {
+    "file": "assets/navbarEntry.js",
+    "name": "navbarEntry",
+    "src": "src/navbarEntry.tsx",
+    "isEntry": true,
+    "imports": [
+      "_index.js",
+      "_utils.js",
+      "_use-scroll.js",
+      "_proxy.js"
+    ]
+  },
+  "src/portfolioPageEntry.tsx": {
+    "file": "assets/portfolioPageEntry.js",
+    "name": "portfolioPageEntry",
+    "src": "src/portfolioPageEntry.tsx",
+    "isEntry": true,
+    "imports": [
+      "_index.js",
+      "_use-scroll.js",
+      "_proxy.js",
+      "_utils.js"
+    ]
+  }
+}

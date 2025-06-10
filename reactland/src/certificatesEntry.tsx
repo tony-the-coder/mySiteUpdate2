@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import CardHoverEffectDemo from './components/ui/card-hover-effect-demo';
-import '../assets/src/output.css'; // Ensure Tailwind CSS is included
+import { HoverEffect } from './components/ui/card-hover-effect';
 import './index.css'; // Your global CSS
 
 // This function will fetch data from your Django API
@@ -28,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const certificates = await fetchCertificates();
     ReactDOM.createRoot(container).render(
       <React.StrictMode>
-        <CardHoverEffectDemo items={certificates} />
+        <HoverEffect items={certificates} />
       </React.StrictMode>,
     );
   }
