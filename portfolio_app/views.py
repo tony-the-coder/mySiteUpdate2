@@ -441,7 +441,8 @@ def staff_manage_portfolio_images(request, pk):
 
 class CertificateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Certificate# Add other fields you need
+        model = Certificate
+        fields = '__all__'
 
 # Change to ReadOnlyModelViewSet to be used with a router
 class CertificateViewSet(viewsets.ReadOnlyModelViewSet): # Renamed and changed base class
