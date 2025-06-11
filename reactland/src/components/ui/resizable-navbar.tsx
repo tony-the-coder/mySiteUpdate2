@@ -125,7 +125,7 @@ export const NavbarLogo = () => {
   return (
     <a href="/" className="relative flex items-center space-x-2">
       <img
-        src="src/assets/ttc-logo.png"
+        src="{% static 'assets/ttc-logo.png' %}"
         alt="Tony the Coder Logo"
         className={cn(
           "h-10 w-auto transition-all duration-200",
