@@ -213,7 +213,7 @@ if not DEBUG:
 
         # Optional: Recommended additional settings for S3-compatible storage
         AWS_S3_FILE_OVERWRITE = False
-        AWS_DEFAULT_ACL = 'public-read' # Grants public read access (adjust if private)
+        AWS_DEFAULT_ACL = 'public-read'
         AWS_S3_SIGNATURE_VERSION = 's3v4'
         AWS_QUERYSTRING_AUTH = False
         AWS_S3_VERIFY = True
