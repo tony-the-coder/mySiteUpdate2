@@ -20,9 +20,8 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import strip_tags
 from django.utils.text import Truncator
-from django.shortcuts import render
-from rest_framework import generics, serializers, viewsets
-from .models import Certificate, Project
+from rest_framework import viewsets # Keep viewsets
+from .models import Certificate, Project # Ensure Project is imported if used elsewhere or remove if not
 
 # --- Third Party Imports ---
 try:
@@ -44,8 +43,8 @@ from .models import (
     ContactInquiry,
     PortfolioImage,
     PortfolioProject,
-    Certificate,
-    Project
+    # Certificate, # Already imported above
+    # Project # Already imported above
 )
 
 logger = logging.getLogger(__name__)
