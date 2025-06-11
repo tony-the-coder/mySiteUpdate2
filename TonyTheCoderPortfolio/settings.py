@@ -84,7 +84,7 @@ TEMPLATES = [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
+                "django.template.context_processors.messages",
             ],
         },
     },
@@ -130,7 +130,7 @@ USE_TZ = True
 
 # --- STATIC & MEDIA FILES ---
 STATIC_URL = "/static/"
-MEDIA_URL = "/media/" # This will be overridden by the S3 MEDIA_URL if DEBUG is False
+MEDIA_URL = "/media/"
 
 # This is where `collectstatic` will gather all static files for deployment.
 STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -142,8 +142,11 @@ if not DEBUG:
 # This directory is for your source static files (which Vite also uses)
 STATICFILES_DIRS = [
     BASE_DIR / "assets",
-    BASE_DIR / "assets" / "vite"
+    # Add the React build output directory here
+    # Assumes your React project is in 'reactland' and builds to a 'dist' folder
+    BASE_DIR / "reactland" / "dist", # ADDED: This line is crucial!
 ]
+
 
 # Media files (User-uploaded content) - used when DEBUG is True
 MEDIA_ROOT = BASE_DIR / "media/"
@@ -208,8 +211,11 @@ if not DEBUG:
         # Set DEFAULT_FILE_STORAGE to use django-storages's S3 backend for media files
         DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-        # Define the URL for your media files to point to your S3-compatible bucket
-        MEDIA_URL = f'{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/'
+        # IMPORTANT: DO NOT set MEDIA_URL to the full S3 path here.
+        # django-storages handles the URL generation automatically when DEFAULT_FILE_STORAGE is set.
+        # The base MEDIA_URL = "/media/" is sufficient as a conceptual prefix.
+        # If you explicitly need direct S3 links without Django's URL routing,
+        # you would use the `instance.file_field.url` directly which would yield the S3 URL.
 
         # Optional: Recommended additional settings for S3-compatible storage
         AWS_S3_FILE_OVERWRITE = False
@@ -219,5 +225,4 @@ if not DEBUG:
         AWS_S3_VERIFY = True
 
     else:
-        # This print statement will now appear only if the actual APP keys or bucket name are missing
         print("WARNING: AH S3 Object Storage (Stackhero) application environment variables (HOST, APP_ACCESS_KEY, APP_SECRET_KEY, BUCKET_NAME) NOT FOUND. Media files will use local storage if DEBUG is False.")

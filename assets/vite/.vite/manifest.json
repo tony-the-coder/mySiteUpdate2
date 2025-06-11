@@ -2,8 +2,10 @@
   "_ContactUs.js": {
     "file": "assets/ContactUs.js",
     "name": "ContactUs",
+    "isDynamicEntry": true,
     "imports": [
       "_index.js",
+      "_preload-helper.js",
       "_proxy.js"
     ],
     "dynamicImports": [
@@ -20,6 +22,10 @@
     "css": [
       "assets/index.css"
     ]
+  },
+  "_preload-helper.js": {
+    "file": "assets/preload-helper.js",
+    "name": "preload-helper"
   },
   "_proxy.js": {
     "file": "assets/proxy.js",
@@ -46,9 +52,11 @@
     "src": "src/aboutPageEntry.tsx",
     "isEntry": true,
     "imports": [
-      "_index.js",
-      "_utils.js",
-      "_proxy.js"
+      "_preload-helper.js",
+      "_index.js"
+    ],
+    "dynamicImports": [
+      "src/components/AboutUsComponent.tsx"
     ]
   },
   "src/assets/img/ttc-logo.png": {
@@ -61,8 +69,20 @@
     "src": "src/certificatesEntry.tsx",
     "isEntry": true,
     "imports": [
-      "_index.js",
-      "_utils.js"
+      "_preload-helper.js",
+      "_index.js"
+    ],
+    "dynamicImports": [
+      "src/pages/PortfolioShowcasePage.tsx"
+    ]
+  },
+  "src/components/AboutUsComponent.tsx": {
+    "file": "assets/AboutUsComponent.js",
+    "name": "AboutUsComponent",
+    "src": "src/components/AboutUsComponent.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_index.js"
     ]
   },
   "src/components/ui/globe.tsx": {
@@ -73,6 +93,7 @@
     "imports": [
       "_index.js",
       "_ContactUs.js",
+      "_preload-helper.js",
       "_proxy.js"
     ]
   },
@@ -82,9 +103,11 @@
     "src": "src/contactPageEntry.tsx",
     "isEntry": true,
     "imports": [
-      "_index.js",
-      "_ContactUs.js",
-      "_proxy.js"
+      "_preload-helper.js",
+      "_index.js"
+    ],
+    "dynamicImports": [
+      "_ContactUs.js"
     ]
   },
   "src/homeHeroEntry.tsx": {
@@ -106,6 +129,7 @@
     "imports": [
       "_index.js",
       "_ContactUs.js",
+      "_preload-helper.js",
       "_proxy.js"
     ]
   },
@@ -124,16 +148,29 @@
       "assets/ttc-logo.png"
     ]
   },
+  "src/pages/PortfolioShowcasePage.tsx": {
+    "file": "assets/PortfolioShowcasePage.js",
+    "name": "PortfolioShowcasePage",
+    "src": "src/pages/PortfolioShowcasePage.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_index.js",
+      "_use-scroll.js",
+      "_proxy.js",
+      "_utils.js"
+    ]
+  },
   "src/portfolioPageEntry.tsx": {
     "file": "assets/portfolioPageEntry.js",
     "name": "portfolioPageEntry",
     "src": "src/portfolioPageEntry.tsx",
     "isEntry": true,
     "imports": [
-      "_index.js",
-      "_use-scroll.js",
-      "_proxy.js",
-      "_utils.js"
+      "_preload-helper.js",
+      "_index.js"
+    ],
+    "dynamicImports": [
+      "src/pages/PortfolioShowcasePage.tsx"
     ]
   }
 }
