@@ -1,22 +1,16 @@
 # portfolio_app/api/views.py
 from rest_framework import viewsets
+from rest_framework import serializers # Correct import
 from portfolio_app.models import Certificate
-from .serializers import CertificateSerializer
+from .serializers import CertificateSerializer # Correct import
 
 class CertificateViewSet(viewsets.ReadOnlyModelViewSet):
     """
     A simple ViewSet for viewing certificates.
     Uses ReadOnlyModelViewSet as certificates are typically read-only via API.
     """
-    queryset = Certificate.objects.filter(is_active=True).order_by('order', '-issue_date')
+    # THIS IS THE LINE THAT NEEDS TO BE CHANGED:
+    # It must NOT try to filter by 'is_active' if the Certificate model doesn't have that field.
+    queryset = Certificate.objects.all().order_by('order', '-issue_date') # REMOVE .filter(is_active=True)
     serializer_class = CertificateSerializer
-    # Add authentication/permission classes if needed, e.g.,
-    # authentication_classes = [SessionAuthentication, BasicAuthentication]
-    # permission_classes = [IsAuthenticatedOrReadOnly]
-
-    # If you have an 'is_active' field or similar to control visibility:
-    def get_queryset(self):
-        # Ensure only active certificates are shown, if you add an is_active field to Certificate model
-        # (Based on your models.py, Certificate does not have is_active, but if you add it, uncomment below)
-        # return Certificate.objects.filter(is_active=True).order_by('order', '-issue_date')
-        return Certificate.objects.all().order_by('order', '-issue_date') # Default: show all
+    # Add authentication/permission classes if needed
