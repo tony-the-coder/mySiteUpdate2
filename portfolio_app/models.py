@@ -24,7 +24,7 @@ class PortfolioCategory(models.Model):
     name = models.CharField(max_length=100, unique=True, help_text="e.g., Python/Django, React, AI/ML, Full-Stack")
     slug = models.SlugField(max_length=110, unique=True, blank=True)
     description = models.TextField(blank=True, null=True, help_text="Optional: A brief description of this category/tech stack.")
-    is_active = models.BooleanField(default=True, db_index=True)
+    # is_active = models.BooleanField(default=True, db_index=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -97,10 +97,10 @@ class PortfolioProject(models.Model):  # For Your Coding Projects
         null=True, blank=True, help_text="Year the project was primarily developed or completed."
     )
 
-    is_active = models.BooleanField(
-        default=True, db_index=True,
-        help_text="Controls if this project is visible on your public portfolio."
-    )
+    # is_active = models.BooleanField(
+    #     default=True, db_index=True,
+    #     help_text="Controls if this project is visible on your public portfolio."
+    # )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

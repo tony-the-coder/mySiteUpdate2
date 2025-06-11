@@ -19,7 +19,7 @@ from .models import (
     BlogCategory,
     BlogPost,
     ContactInquiry,
-    Certificate,
+    Certificate, # Removed 'Project' from import based on earlier discussion
 )
 from .forms import ContactForm, PortfolioProjectForm, PortfolioImageForm, BlogPostForm
 
