@@ -258,16 +258,6 @@ class ContactInquiry(models.Model):
         verbose_name_plural = "Contact Inquiries"
         ordering = ['-submitted_at']
 
-# Ensure this 'Project' model is only defined once and is correct
-class Project(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    # Add other fields as necessary for your projects
-    # image = models.ImageField(upload_to='projects/', blank=True, null=True)
-
-    def __str__(self):
-        return self.title
-
 # The Certificate model that should be present and correct
 class Certificate(models.Model):
     title = models.CharField(max_length=200)
@@ -278,6 +268,8 @@ class Certificate(models.Model):
     credential_url = models.URLField(max_length=200, blank=True, null=True)
     image = models.ImageField(upload_to='certificates/', blank=True, null=True) # If you want to store images
     order = models.IntegerField(default=0, help_text="Order in which certificates are displayed")
+    # Added is_active to allow filtering in API and admin
+    is_active = models.BooleanField(default=True, db_index=True, help_text="Controls if this certificate is visible on the public site.")
 
     class Meta:
         ordering = ['order', 'issue_date', 'title']
@@ -286,6 +278,4 @@ class Certificate(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        # Optionally, if you use a slug in URLs for certificates
-        # self.slug = slugify(self.title)
         super().save(*args, **kwargs)

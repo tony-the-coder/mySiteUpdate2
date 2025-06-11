@@ -1,6 +1,6 @@
-import { cn } from "@/lib/utils"; // This path is correct due to tsconfig.json
-import { AnimatePresence, motion } from "framer-motion"; // Correct import path for framer-motion
-
+// reactland/src/components/ui/card-hover-effect.tsx
+import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 
 export const HoverEffect = ({
@@ -11,6 +11,7 @@ export const HoverEffect = ({
     title: string;
     description: string;
     link: string;
+    imageUrl?: string | null; // Add imageUrl to the item type
   }[];
   className?: string;
 }) => {
@@ -49,6 +50,13 @@ export const HoverEffect = ({
             )}
           </AnimatePresence>
           <Card>
+            {item.imageUrl && ( // Conditionally render image if imageUrl exists
+              <img
+                src={item.imageUrl}
+                alt={item.title}
+                className="w-full h-32 object-cover rounded-md mb-4" // Tailwind classes for styling
+              />
+            )}
             <CardTitle>{item.title}</CardTitle>
             <CardDescription>{item.description}</CardDescription>
           </Card>

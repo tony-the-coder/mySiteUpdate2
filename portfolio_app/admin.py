@@ -13,7 +13,7 @@ from .models import (
     BlogPost,
     ContactInquiry,
     Certificate,
-    # ActivityLog # Optional: Uncomment to keep and register ActivityLog
+    # ActivityLog # Removed if not needed
 )
 # Import the new widget for CKEditor 5
 from django_ckeditor_5.widgets import CKEditor5Widget
@@ -175,6 +175,13 @@ class ContactInquiryAdmin(admin.ModelAdmin):
 
 @admin.register(Certificate)
 class CertificateAdmin(admin.ModelAdmin):
-    list_display = ('title', 'issuing_body', 'issue_date', 'order', 'credential_url')
+    list_display = ('title', 'issuing_body', 'issue_date', 'order', 'credential_url', 'image_preview') # Added image_preview
     list_editable = ('order',)
     search_fields = ('title', 'description', 'issuing_body')
+    readonly_fields = ('image_preview',) # Make image_preview read-only in the detail view
+
+    def image_preview(self, obj):
+        if obj.image and hasattr(obj.image, 'url'):
+            return mark_safe(f'<img src="{obj.image.url}" width="150" height="auto" style="max-height: 100px; object-fit: contain;" />')
+        return "(No image)"
+    image_preview.short_description = 'Image Preview'

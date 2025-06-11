@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "motion/react";
 import React, { useRef, useState, cloneElement, isValidElement } from "react";
-
+import logo from '../../assets/img/ttc-logo.png';
 // --- TYPE DEFINITIONS ---
 interface NavbarProps {
     children: React.ReactNode | ((visible: boolean) => React.ReactNode);
