@@ -13,9 +13,7 @@ from .models import (
     BlogPost,
     ContactInquiry,
     Certificate,
-    # ActivityLog # Removed if not needed
 )
-# Import the new widget for CKEditor 5
 from django_ckeditor_5.widgets import CKEditor5Widget
 
 # --- Inlines ---
@@ -33,21 +31,20 @@ class PortfolioImageInline(admin.TabularInline):
     image_preview.short_description = 'Preview'
 
     class Media:
-        js = ('js/admin_image_preview.js',) # Ensure this file is in your static/js/ directory
+        js = ('js/admin_image_preview.js',)
 
 
 # --- Custom Forms for Admin ---
 class PortfolioProjectAdminForm(forms.ModelForm):
-    # Use CKEditor5Widget for the 'details' field
     details = forms.CharField(
-        widget=CKEditor5Widget(config_name='default'), # UPDATED HERE
-        required=False # Set required=False if blank=True in model
+        widget=CKEditor5Widget(config_name='default'),
+        required=False
     )
-    # If you want CKEditor for short_description too, you could configure a 'small' config in settings.py
-    # short_description = forms.CharField(widget=CKEditor5Widget(config_name='small'), required=False)
 
     class Meta:
         model = PortfolioProject
+        # Using '__all__' will automatically exclude 'is_active' if it's not defined in the model.
+        # If you had a specific list of fields, ensure 'is_active' is explicitly removed.
         fields = '__all__'
         widgets = {
             'categories': forms.CheckboxSelectMultiple,
@@ -55,9 +52,8 @@ class PortfolioProjectAdminForm(forms.ModelForm):
         }
 
 class BlogPostAdminForm(forms.ModelForm):
-    # Use CKEditor5Widget for the 'content' field
     content = forms.CharField(
-        widget=CKEditor5Widget(config_name='default'), # UPDATED HERE
+        widget=CKEditor5Widget(config_name='default'),
         required=False
     )
     excerpt = forms.CharField(widget=forms.Textarea(attrs={'rows': 3}), required=False)
@@ -70,25 +66,31 @@ class BlogPostAdminForm(forms.ModelForm):
 
 @admin.register(PortfolioCategory)
 class PortfolioCategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'is_active', 'description')
+    # 'is_active' removed from list_display based on models.py
+    list_display = ('name', 'slug', 'description')
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name', 'description')
-    list_filter = ('is_active',)
+    # 'is_active' removed from list_filter based on models.py
+    # If there were other filters, ensure they are still here.
+    list_filter = () # If no other filters, use an empty tuple
 
 @admin.register(PortfolioProject)
 class PortfolioProjectAdmin(admin.ModelAdmin):
-    form = PortfolioProjectAdminForm # Uses the updated form with CKEditor5Widget
-    list_display = ('title', 'display_categories', 'is_active', 'order', 'github_url', 'live_demo_url', 'created_at')
-    list_filter = ('categories', 'is_active', 'status')
-    search_fields = ('title', 'short_description', 'details', 'technologies_used')
-    list_editable = ('is_active', 'order')
+    form = PortfolioProjectAdminForm
+    # 'is_active' removed from list_display based on models.py
+    list_display = ('title', 'display_categories', 'order', 'github_url', 'live_demo_url', 'created_at')
+    # 'is_active' removed from list_filter based on models.py
+    list_filter = ('categories', 'status')
+    # 'is_active' removed from list_editable based on models.py
+    list_editable = ('order',)
     prepopulated_fields = {'slug': ('title',)}
     inlines = [PortfolioImageInline]
     filter_horizontal = ('categories',)
 
     fieldsets = (
         (None, {
-            'fields': ('title', 'slug', 'categories', 'is_active', 'order', 'status', 'year_completed')
+            # 'is_active' removed from fieldsets based on models.py
+            'fields': ('title', 'slug', 'categories', 'order', 'status', 'year_completed')
         }),
         ('Project URLs & Tech Stack', {
             'fields': ('github_url', 'live_demo_url', 'technologies_used')
@@ -127,14 +129,14 @@ class PortfolioImageAdmin(admin.ModelAdmin):
 
 @admin.register(BlogCategory)
 class BlogCategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'is_active', 'description')
+    list_display = ('name', 'slug', 'is_active', 'description') # 'is_active' is valid for BlogCategory
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name', 'description')
-    list_filter = ('is_active',)
+    list_filter = ('is_active',) # 'is_active' is valid for BlogCategory
 
 @admin.register(BlogPost)
 class BlogPostAdmin(admin.ModelAdmin):
-    form = BlogPostAdminForm # Uses the updated form with CKEditor5Widget
+    form = BlogPostAdminForm
     list_display = ('title', 'category', 'status', 'published_date', 'author_name', 'is_active')
     list_filter = ('status', 'category', 'is_active', 'author')
     search_fields = ('title', 'content', 'excerpt')
@@ -156,11 +158,13 @@ class BlogPostAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
     def make_published(self, request, queryset):
-        queryset.update(status=BlogPost.PUBLISHED, published_date=timezone.now())
+        # CORRECTED: Use string literal for 'PUBLISHED'
+        queryset.update(status='PUBLISHED', published_date=timezone.now())
     make_published.short_description = "Mark selected posts as Published"
 
     def make_draft(self, request, queryset):
-        queryset.update(status=BlogPost.DRAFT)
+        # CORRECTED: Use string literal for 'DRAFT'
+        queryset.update(status='DRAFT')
     make_draft.short_description = "Mark selected posts as Draft"
 
 
@@ -175,10 +179,10 @@ class ContactInquiryAdmin(admin.ModelAdmin):
 
 @admin.register(Certificate)
 class CertificateAdmin(admin.ModelAdmin):
-    list_display = ('title', 'issuing_body', 'issue_date', 'order', 'credential_url', 'image_preview') # Added image_preview
+    list_display = ('title', 'issuing_body', 'issue_date', 'order', 'credential_url', 'image_preview')
     list_editable = ('order',)
     search_fields = ('title', 'description', 'issuing_body')
-    readonly_fields = ('image_preview',) # Make image_preview read-only in the detail view
+    readonly_fields = ('image_preview',)
 
     def image_preview(self, obj):
         if obj.image and hasattr(obj.image, 'url'):
