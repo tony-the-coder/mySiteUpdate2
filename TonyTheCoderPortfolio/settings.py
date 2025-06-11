@@ -84,7 +84,9 @@ TEMPLATES = [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
-                "django.template.context_processors.messages",
+                # CORRECTED: Changed 'django.template.context_processors.messages'
+                # to 'django.contrib.messages.context_processors.messages'
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
@@ -144,7 +146,9 @@ STATICFILES_DIRS = [
     BASE_DIR / "assets",
     # Add the React build output directory here
     # Assumes your React project is in 'reactland' and builds to a 'dist' folder
-    BASE_DIR / "reactland" / "dist", # ADDED: This line is crucial!
+    BASE_DIR / "reactland" / "dist", # This line is crucial!
+    # Ensure that 'assets/vite/.vite' isn't conflicting or redundant if Vite's output is now in 'dist'
+    # BASE_DIR / "assets" / "vite" # <-- You might remove this if all Vite output goes to 'dist'
 ]
 
 
@@ -166,9 +170,9 @@ CSRF_TRUSTED_ORIGINS.append('https://*.herokuapp.com')
 
 # Add explicit Heroku app domain if HEROKU_APP_NAME is set
 if HEROKU_APP_NAME:
-    CSRF_TRUSTED_ORIGINS.append(f'https://{HEROKU_APP_NAME}.herokuapp.com')
+    CSRF_TRUSTED_ORIGINS.append(f'{HEROKU_APP_NAME}.herokuapp.com')
     # If you use a custom domain on Heroku, its canonical host might be herokudns.com
-    CSRF_TRUSTED_ORIGINS.append(f'https://{HEROKU_APP_NAME}.herokudns.com')
+    CSRF_TRUSTED_ORIGINS.append(f'{HEROKU_APP_NAME}.herokudns.com')
 
 # Add Render deployment host if RENDER_EXTERNAL_HOSTNAME is set
 if RENDER_EXTERNAL_HOSTNAME:
