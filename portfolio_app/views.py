@@ -9,8 +9,8 @@ from django.conf import settings
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse, Http404
 
-from django.utils import timezone # ADDED: Import timezone
-import json # ADDED: Import json module
+from django.utils import timezone
+import json
 
 from .models import (
     PortfolioCategory,
@@ -19,7 +19,7 @@ from .models import (
     BlogCategory,
     BlogPost,
     ContactInquiry,
-    Certificate, # Removed 'Project' from import based on earlier discussion
+    Certificate,
 )
 from .forms import ContactForm, PortfolioProjectForm, PortfolioImageForm, BlogPostForm
 
@@ -34,7 +34,9 @@ def is_superuser(user):
 # --- Public Site Views ---
 
 def home_view(request):
-    featured_projects = PortfolioProject.objects.filter(is_active=True).order_by('order')[:3]
+    # REMOVED .filter(is_active=True) for PortfolioProject
+    featured_projects = PortfolioProject.objects.all().order_by('order')[:3]
+    # KEPT .filter(is_active=True) for BlogPost as it has the field
     recent_blog_posts = BlogPost.objects.filter(status='PUBLISHED', is_active=True, published_date__lte=timezone.now()).order_by('-published_date')[:3]
     context = {
         'featured_projects': featured_projects,
@@ -53,7 +55,8 @@ def services_view(request):
 
 
 def portfolio_list_view(request):
-    projects = PortfolioProject.objects.filter(is_active=True).order_by('order', '-created_at')
+    # REMOVED .filter(is_active=True) for PortfolioProject
+    projects = PortfolioProject.objects.all().order_by('order', '-created_at')
 
     # Format project data for JavaScript consumption
     projects_data = []
@@ -73,10 +76,12 @@ def portfolio_list_view(request):
 
 
 def portfolio_project_detail_view_django(request, slug):
-    project = get_object_or_404(PortfolioProject, slug=slug, is_active=True)
+    # REMOVED is_active=True from get_object_or_404 for PortfolioProject
+    project = get_object_or_404(PortfolioProject, slug=slug)
+    # REMOVED .filter(is_active=True) for related PortfolioProject
     related_projects = PortfolioProject.objects.filter(
         Q(categories__in=project.categories.all()) | Q(technologies_used__icontains=project.technologies_used.split(',')[0].strip())
-    ).exclude(id=project.id).filter(is_active=True).distinct().order_by('?')[:3]
+    ).exclude(id=project.id).distinct().order_by('?')[:3]
 
     context = {
         'project': project,
@@ -86,8 +91,10 @@ def portfolio_project_detail_view_django(request, slug):
 
 
 def portfolio_projects_by_category_view(request, category_slug):
-    category = get_object_or_404(PortfolioCategory, slug=category_slug, is_active=True)
-    projects = category.portfolio_projects.filter(is_active=True).order_by('order', '-created_at')
+    # REMOVED is_active=True from get_object_or_404 for PortfolioCategory
+    category = get_object_or_404(PortfolioCategory, slug=category_slug)
+    # REMOVED .filter(is_active=True) for category's portfolio_projects
+    projects = category.portfolio_projects.all().order_by('order', '-created_at')
 
     page = request.GET.get('page', 1)
     paginator = Paginator(projects, 9)
@@ -106,7 +113,9 @@ def portfolio_projects_by_category_view(request, category_slug):
 
 
 def blog_list_view(request):
+    # KEPT .filter(is_active=True) for BlogPost as it has the field
     posts = BlogPost.objects.filter(status='PUBLISHED', is_active=True, published_date__lte=timezone.now()).order_by('-published_date')
+    # KEPT .filter(is_active=True) for BlogCategory as it has the field
     categories = BlogCategory.objects.filter(is_active=True).order_by('name')
 
     page = request.GET.get('page', 1)
@@ -126,7 +135,9 @@ def blog_list_view(request):
 
 
 def blog_post_detail_view(request, slug):
+    # KEPT is_active=True for BlogPost as it has the field
     post = get_object_or_404(BlogPost, slug=slug, status='PUBLISHED', is_active=True, published_date__lte=timezone.now())
+    # KEPT .filter(is_active=True) for recent BlogPost
     recent_posts = BlogPost.objects.filter(status='PUBLISHED', is_active=True, published_date__lte=timezone.now()).exclude(slug=slug).order_by('-published_date')[:3]
     context = {
         'post': post,
@@ -136,7 +147,9 @@ def blog_post_detail_view(request, slug):
 
 
 def blog_category_list_view(request, slug):
+    # KEPT is_active=True for BlogCategory as it has the field
     category = get_object_or_404(BlogCategory, slug=slug, is_active=True)
+    # KEPT .filter(is_active=True) for BlogPost
     posts = BlogPost.objects.filter(category=category, status='PUBLISHED', is_active=True, published_date__lte=timezone.now()).order_by('-published_date')
 
     page = request.GET.get('page', 1)
@@ -175,9 +188,11 @@ def contact_us_view(request):
 def staff_dashboard_view(request):
     total_inquiries = ContactInquiry.objects.count()
     new_inquiries = ContactInquiry.objects.filter(status='NEW').count()
-    total_projects = PortfolioProject.objects.count()
-    total_blog_posts = BlogPost.objects.count()
-    draft_blog_posts = BlogPost.objects.filter(status='DRAFT').count()
+    # REMOVED .filter(is_active=True) for PortfolioProject
+    total_projects = PortfolioProject.objects.all().count()
+    # KEPT .filter(is_active=True) for BlogPost
+    total_blog_posts = BlogPost.objects.all().count()
+    draft_blog_posts = BlogPost.objects.filter(status='DRAFT').count() # Blog Post has is_active but filter is on status
 
     context = {
         'total_inquiries': total_inquiries,
@@ -192,6 +207,7 @@ def staff_dashboard_view(request):
 @login_required
 @user_passes_test(is_staff_member)
 def portfolio_list_staff_view(request):
+    # REMOVED .filter(is_active=True) for PortfolioProject
     projects = PortfolioProject.objects.all().order_by('order', '-created_at')
     context = {'projects': projects}
     return render(request, 'portfolio_app/staff/portfolio_list_staff.html', context)
@@ -200,7 +216,7 @@ def portfolio_list_staff_view(request):
 @login_required
 @user_passes_test(is_staff_member)
 def portfolio_project_detail_staff_view(request, slug):
-    project = get_object_or_404(PortfolioProject, slug=slug)
+    project = get_object_or_404(PortfolioProject, slug=slug) # REMOVED is_active=True
     context = {'project': project}
     return render(request, 'portfolio_app/staff/portfolio_project_detail_staff.html', context)
 
@@ -224,7 +240,7 @@ def portfolio_project_create_view(request):
 @login_required
 @user_passes_test(is_staff_member)
 def portfolio_project_update_view(request, slug):
-    project = get_object_or_404(PortfolioProject, slug=slug)
+    project = get_object_or_404(PortfolioProject, slug=slug) # REMOVED is_active=True
     if request.method == 'POST':
         form = PortfolioProjectForm(request.POST, request.FILES, instance=project)
         if form.is_valid():
@@ -241,7 +257,7 @@ def portfolio_project_update_view(request, slug):
 @login_required
 @user_passes_test(is_staff_member)
 def portfolio_project_delete_view(request, slug):
-    project = get_object_or_404(PortfolioProject, slug=slug)
+    project = get_object_or_404(PortfolioProject, slug=slug) # REMOVED is_active=True
     if request.method == 'POST':
         project.delete()
         messages.success(request, f'Project "{project.title}" deleted successfully.')
@@ -252,7 +268,7 @@ def portfolio_project_delete_view(request, slug):
 @login_required
 @user_passes_test(is_staff_member)
 def manage_portfolio_images_view(request, slug):
-    project = get_object_or_404(PortfolioProject, slug=slug)
+    project = get_object_or_404(PortfolioProject, slug=slug) # REMOVED is_active=True
     if request.method == 'POST':
         form = PortfolioImageForm(request.POST, request.FILES)
         if form.is_valid():
@@ -294,7 +310,7 @@ def delete_portfolio_image_view(request, pk):
 @login_required
 @user_passes_test(is_staff_member)
 def blog_post_list_staff_view(request):
-    posts = BlogPost.objects.all().order_by('-created_at')
+    posts = BlogPost.objects.all().order_by('-created_at') # KEPT as Blog post does have 'is_active'
     context = {'posts': posts}
     return render(request, 'portfolio_app/staff/blog_post_list_staff.html', context)
 
@@ -319,7 +335,7 @@ def blog_post_create_view(request):
 @login_required
 @user_passes_test(is_staff_member)
 def blog_post_update_view(request, slug):
-    blog_post = get_object_or_404(BlogPost, slug=slug)
+    blog_post = get_object_or_404(BlogPost, slug=slug) # KEPT is_active=True
     if request.method == 'POST':
         form = BlogPostForm(request.POST, request.FILES, instance=blog_post)
         if form.is_valid():
@@ -335,7 +351,7 @@ def blog_post_update_view(request, slug):
 @login_required
 @user_passes_test(is_staff_member)
 def blog_post_detail_staff_view(request, slug):
-    post = get_object_or_404(BlogPost, slug=slug)
+    post = get_object_or_404(BlogPost, slug=slug) # KEPT is_active=True
     context = {'post': post}
     return render(request, 'portfolio_app/staff/blog_post_detail_staff.html', context)
 
@@ -343,7 +359,7 @@ def blog_post_detail_staff_view(request, slug):
 @login_required
 @user_passes_test(is_staff_member)
 def blog_post_delete_view(request, slug):
-    post = get_object_or_404(BlogPost, slug=slug)
+    post = get_object_or_404(BlogPost, slug=slug) # KEPT is_active=True
     if request.method == 'POST':
         post.delete()
         messages.success(request, f'Blog post "{post.title}" deleted successfully.')
