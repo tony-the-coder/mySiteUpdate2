@@ -1,203 +1,291 @@
 {% extends "base.html" %}
+
 {% load static %}
+
 {% load django_vite %} {# Make sure django_vite is loaded for React integration #}
+
+
 
 {% block title %}About Me - Tony the Coder{% endblock %}
 
+
+
 {% block meta_description %}Learn more about Tony the Coder, a passionate Full-Stack Developer specializing in Python, Django, React, and AI-driven solutions. Discover my journey, skills, and development philosophy.{% endblock meta_description %}
 
+
+
+{# Set the body class for this specific page #}
+
+{% block body_class %}bg-brand-charcoal-darker{% endblock %}
+
+
+
 {# Hero Section for About Me Page (Now powered by React Lamp Effect) #}
+
 {% block hero_section %}
+
     {# This div will be the mount point for your React LampDemo component #}
+
     {# The min-h-screen class is crucial for the Lamp effect to have enough vertical space #}
+
     <div id="about-page-lamp-hero-root" class="min-h-screen flex items-center justify-center bg-slate-950 text-white">
+
         Loading Awesome Lamp Effect...
+
     </div>
+
 {% endblock hero_section %}
 
-{% block breadcrumbs_block %}
-    {% if breadcrumbs %}
+
+
+{#{% block breadcrumbs_block %}#}
+{##}
+{#    {% if breadcrumbs %}#}
+{##}
         {# Ensure your views.py passes the correct breadcrumbs for this page #}
-        {% include 'partials/_breadcrumbs.html' with breadcrumbs=breadcrumbs %}
-    {% endif %}
-{% endblock breadcrumbs_block %}
+{##}
+{#        {% include 'partials/_breadcrumbs.html' with breadcrumbs=breadcrumbs %}#}
+{##}
+{#    {% endif %}#}
+{##}
+{#{% endblock breadcrumbs_block %}#}
+
+
 
 {% block content %}
+
 <div class="bg-brand-white py-16 lg:py-24">
+
     <div class="container mx-auto px-6 lg:px-8">
 
+
+
         {# Introduction Section #}
+
         <section class="max-w-3xl mx-auto text-center mb-16 lg:mb-24" data-aos="fade-up">
+
             <h2 class="section-heading">
+
                 More Than Just Code
+
             </h2>
+
             <p class="section-subheading mb-6">
+
                 Hello! I'm Tony, a dedicated developer passionate about crafting elegant and effective solutions to complex problems. My journey into technology is driven by a curiosity for how things work and a desire to build applications that make a real impact. I thrive on learning new technologies and continuously refining my skills in web development and artificial intelligence.
+
             </p>
+
             <p class="section-subheading">
+
                 My approach is rooted in clear communication, collaborative problem-solving, and a commitment to writing clean, maintainable code. I believe that the best results come from understanding the core needs of a project and applying the right tools and techniques to achieve them.
+
             </p>
+
         </section>
+
+
 
         {# My Approach / Skills Section #}
+
         <section class="max-w-4xl mx-auto mb-16 lg:mb-24">
+
             <h2 class="section-heading text-center mb-12" data-aos="fade-up">
+
                 My Development Philosophy
+
             </h2>
+
             <div class="space-y-10">
+
                 {# Feature 1: Problem Solving / Clean Code #}
+
                 <div class="flex flex-col md:flex-row items-center text-center md:text-left" data-aos="fade-up" data-aos-delay="100">
+
                     <div class="md:w-1/4 mb-6 md:mb-0 md:mr-8 flex-shrink-0 flex justify-center md:justify-start">
+
                         <div class="text-brand-gold text-5xl md:text-6xl">
+
                             {# Replace with a relevant SVG icon for "Problem Solving" or "Code Quality" #}
+
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mx-auto md:mx-0">
+
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m0 0l3 2.25M3 12h18M3 12l3-2.25M3 12l3 2.25M17.25 7.5l3 2.25-3 2.25m0 0l3 2.25M21 12h-3.75M21 12l-3-2.25M21 12l-3 2.25M15 6.75l-3 2.25m0 0l-3-2.25m3 2.25V15m-3-2.25V15m6-6v6.75" />
+
                             </svg>
+
                         </div>
+
                     </div>
+
                     <div class="md:w-3/4">
+
                         <h3 class="font-heading text-2xl text-brand-charcoal font-medium mb-3">Clean Code & Solutions</h3>
+
                         <p class="font-body text-brand-gray-text leading-relaxed">
+
                             I focus on writing well-structured, readable, and maintainable code. I believe in thoroughly understanding problems to deliver efficient and robust solutions that stand the test of time.
+
                         </p>
+
                     </div>
+
                 </div>
 
+
+
                 <hr class="my-10 border-brand-gray-medium" data-aos="fade-up">
+
+
 
                 {# Feature 2: Full-Stack Expertise #}
+
                 <div class="flex flex-col md:flex-row-reverse items-center text-center md:text-left" data-aos="fade-up" data-aos-delay="200">
+
                     <div class="md:w-1/4 mb-6 md:mb-0 md:ml-8 flex-shrink-0 flex justify-center md:justify-end">
+
                         <div class="text-brand-gold text-5xl md:text-6xl">
+
                             {# Replace with a relevant SVG icon for "Full-Stack" or "Web Tech" #}
+
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mx-auto md:mx-0">
+
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+
                             </svg>
+
                         </div>
+
                     </div>
+
                     <div class="md:w-3/4">
+
                         <h3 class="font-heading text-2xl text-brand-charcoal font-medium mb-3">Full-Stack Development</h3>
+
                         <p class="font-body text-brand-gray-text leading-relaxed">
+
                             With skills in both backend (Python, Django, Flask) and frontend (JavaScript, React, HTML, CSS, Tailwind), I can contribute to all layers of application development, ensuring seamless integration and a great user experience.
+
                         </p>
+
                     </div>
+
                 </div>
+
+
 
                 <hr class="my-10 border-brand-gray-medium" data-aos="fade-up">
 
+
+
                 {# Feature 3: AI & Continuous Learning #}
+
                 <div class="flex flex-col md:flex-row items-center text-center md:text-left" data-aos="fade-up" data-aos-delay="300">
+
                     <div class="md:w-1/4 mb-6 md:mb-0 md:mr-8 flex-shrink-0 flex justify-center md:justify-start">
+
                         <div class="text-brand-gold text-5xl md:text-6xl">
+
                              {# Replace with a relevant SVG icon for "AI" or "Innovation" #}
+
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mx-auto md:mx-0">
+
                               <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5M19.5 8.25h-1.5m-15 3.75h1.5m15 0h1.5M12 12a5.25 5.25 0 00-5.25 5.25H12v-5.25z" />
+
                               <path stroke-linecap="round" stroke-linejoin="round" d="M12 12a5.25 5.25 0 015.25 5.25H12v-5.25z" />
+
                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 12V6.75m0 0a5.25 5.25 0 00-5.25-5.25H6.75V12m5.25-5.25a5.25 5.25 0 015.25-5.25h.008v5.25M12 12h.008v5.25A5.25 5.25 0 0112 22.5h-5.25v-5.25M12 12h5.25V6.75A5.25 5.25 0 0012 1.5h-.008V12z" />
+
                             </svg>
-                        </div>
+
                     </div>
+
                     <div class="md:w-3/4">
+
                         <h3 class="font-heading text-2xl text-brand-charcoal font-medium mb-3">AI & Continuous Learning</h3>
+
                         <p class="font-body text-brand-gray-text leading-relaxed">
+
                             I'm actively expanding my knowledge in Artificial Intelligence and Machine Learning, particularly Generative AI, to build smarter and more innovative applications. I am committed to lifelong learning and staying current with emerging technologies.
+
                         </p>
+
                     </div>
+
                 </div>
+
+            </div>
             </div>
         </section>
 
-        {# My Certifications & Learning Section (Badges) #}
+
+
+        {# My Certifications & Learning Section (Badges) - NOW POWERED BY REACT #}
+
         <section class="py-16 lg:py-24 bg-brand-gray-light" data-aos="fade-up" data-aos-delay="100" data-aos-duration="700">
+
             <div class="container mx-auto px-6 lg:px-8 max-w-4xl text-center">
+
                 <h3 class="section-heading mt-0 mb-8">My Certifications & Learning</h3>
-                <div class="flex flex-wrap justify-center items-center gap-6">
-                    {# Your existing Credly Badges #}
-                    <div class="badge-item">
-                        <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="008cd379-7820-47f8-853b-724dd3c63ee8" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
-                    </div>
-                    {# Example other badges - replace with your actual badge IDs #}
-                    <div class="badge-item">
-                        <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="0ef06ae8-9dd7-4f2c-a244-8df61395be25" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
-                    </div>
-                    <div class="badge-item">
-                        <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="0f977c37-b4fa-4c90-893e-aacd91a77cb6" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
-                    </div>
-                    <div class="badge-item">
-                        <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="1ce32ce6-f265-4352-b2e6-5d66f9fd8102" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
-                    </div>
-                    <div class="badge-item">
-                        <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="24e8e432-a98d-4d48-929b-bf6b60d40b8f" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
-                    </div>
-                    <div class="badge-item">
-                        <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="47a91900-7f47-46a4-ba3a-6c9a19fb8d00" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
-                    </div>
-                    <div class="badge-item">
-                        <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="5374d3d3-d5ee-454c-a4ae-ee1bd723b28c" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
-                    </div>
-                    <div class="badge-item">
-                        <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="5bdbdac6-23bb-4eaf-81b7-d93a20c52202" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
-                    </div>
-                    <div class="badge-item">
-                        <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="5c7a1daf-e10b-49cf-9a40-fd17718282cb" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
-                    </div>
-                    <div class="badge-item">
-                        <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="5f6a6d9f-4a74-40f8-9885-703514204efa" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
-                    </div>
-                    <div class="badge-item">
-                        <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="6ae23e12-e766-4e6f-afb4-dc2cc0b9846f" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
-                    </div>
-                    <div class="badge-item">
-                        <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="6ba0d4d4-f0fa-4e02-9c09-987ebfe40b4f" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
-                    </div>
-                    <div class="badge-item">
-                        <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="7aaead64-d276-4f18-8eec-d0acc5ebd88e" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
-                    </div>
-                    <div class="badge-item">
-                        <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="82808286-bdd0-4c5c-9809-9068903893c0" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
-                    </div>
-                    <div class="badge-item">
-                        <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="8a642a4e-7a14-47df-9cb9-b3a0df2ff0d1" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
-                    </div>
-                    <div class="badge-item">
-                        <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="8f31cc0f-08fe-44ce-b358-63cf41d76286" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
-                    </div>
-                    <div class="badge-item">
-                        <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="cb8e273f-0f51-4ab0-9c46-6b2c46b6e733" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
-                    </div>
-                    <div class="badge-item">
-                        <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="db2a75e0-0b27-4c0c-bf26-e8ca59d1cf47" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
-                    </div>
-                    <div class="badge-item">
-                        <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="e6ac93e1-e7d9-4f9b-8b48-d0c42ceccd59" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
-                    </div>
-                    <div class="badge-item">
-                        <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="f7dbe844-8930-4ce6-9476-29c4ab339860" data-share-badge-host="https://www.credly.com"></div><script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
-                    </div>
+
+                {# React component for certificates will render here #}
+
+                <div id="certificates-root" class="w-full">
+
+                    Loading Certificates...
+
                 </div>
+
             </div>
+
         </section>
+
+
 
         {# Call to Action Section #}
+
         <section class="text-center pt-10" data-aos="fade-up">
+
             <h3 class="font-heading text-2xl md:text-3xl text-brand-charcoal font-medium mb-6">
+
                 Ready to Discuss Your Next Project?
+
             </h3>
+
             <p class="section-subheading mb-8 max-w-xl mx-auto">
+
                 Whether it's a web application, an AI integration, or a complex backend system, I'm excited to hear about your ideas.
+
             </p>
+
             <a href="{% url 'portfolio_app:contact_us' %}" class="cta-button-primary">
+
                 Get in Touch
+
             </a>
+
         </section>
 
+
+
     </div>
+
 </div>
+
 {% endblock content %}
 
-{# Include your React entry point for this page here #}
+
+
+{# Include your React entry points for this page here #}
+
 {% block extra_js %}
+
     {{ block.super }} {# Important to keep any parent JS (like Alpine.js or Flowbite) #}
+
     {% vite_react_refresh %} {# For hot module reloading in development #}
-    {% vite_asset 'aboutPageEntry.tsx' %} {# This loads the specific JS bundle for this page #}
+
+    {% vite_asset 'src/aboutPageEntry.tsx' %} {# This loads the specific JS bundle for the LampDemo #}
+
+    {% vite_asset 'src/certificatesEntry.tsx' %} {# This loads the specific JS bundle for the certificates component #}
+
 {% endblock extra_js %}
