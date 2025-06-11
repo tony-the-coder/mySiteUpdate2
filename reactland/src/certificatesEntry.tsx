@@ -1,44 +1,24 @@
-// reactland/src/certificatesEntry.tsx
-import React from 'react';
+// reactland/src/portfolioPageEntry.tsx
+import React, { lazy, Suspense } from 'react'; // Import lazy and Suspense
 import ReactDOM from 'react-dom/client';
-import { HoverEffect } from './components/ui/card-hover-effect';
 import './index.css';
 
-interface CertificateData {
-  title: string;
-  description: string;
-  link: string;
-  imageUrl: string | null; // Add imageUrl property
-}
+// Dynamically import the PortfolioShowcasePage component, handling its named export.
+// This tells React.lazy to treat 'PortfolioShowcasePage' as the default export of this chunk.
+const LazyPortfolioShowcasePage = lazy(() =>
+  import('./pages/PortfolioShowcasePage').then(module => ({ default: module.PortfolioShowcasePage }))
+);
 
-async function fetchCertificates(): Promise<CertificateData[]> {
-  try {
-    const response = await fetch('/api/certificates/'); // Your new API endpoint
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    return data.map((cert: any) => ({
-      title: cert.title,
-      description: cert.description,
-      link: cert.credential_url || '#',
-      imageUrl: cert.image_url || null, // Map the image_url from your API
-    }));
-  } catch (error) {
-    console.error("Failed to fetch certificates:", error);
-    return [
-      { title: "Error Loading", description: "Could not load certificates.", link: "#", imageUrl: null }
-    ]; // Fallback
-  }
-}
-
-document.addEventListener('DOMContentLoaded', async () => {
-  const container = document.getElementById('certificates-root');
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById('portfolio-showcase-root'); // Verify this ID in your portfolio_showcase_react.html
   if (container) {
-    const certificates = await fetchCertificates();
+    // You might also need to pass projects_json data if the lazy-loaded component still relies on it
+    // For now, assuming the component fetches its own data or handles data loading internally.
     ReactDOM.createRoot(container).render(
       <React.StrictMode>
-        <HoverEffect items={certificates} />
+        <Suspense fallback={<div>Loading Portfolio...</div>}>
+          <LazyPortfolioShowcasePage />
+        </Suspense>
       </React.StrictMode>,
     );
   }

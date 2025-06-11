@@ -1,18 +1,23 @@
-// C:\Users\tonyt\Desktop\mySiteUpdated\reactland\src\aboutPageEntry.tsx
-import React from 'react';
+// reactland/src/aboutPageEntry.tsx
+import React, { lazy, Suspense } from 'react'; // Import lazy and Suspense
 import ReactDOM from 'react-dom/client';
-import LampDemo from './components/ui/lamp'; // Ensure this path is correct based on your folder structure
-import './index.css'; // This imports your main Tailwind CSS
+import './index.css';
 
-const rootElement = document.getElementById('about-page-lamp-hero-root');
+// Dynamically import the main component for the About Us page
+// This tells Vite to create a separate JavaScript chunk for AboutUsComponent.
+const LazyAboutUsComponent = lazy(() => import('./components/AboutUsComponent'));
 
-if (rootElement) {
-  ReactDOM.createRoot(rootElement).render(
-    <React.StrictMode>
-      <LampDemo />
-    </React.StrictMode>,
-  );
-  console.log("React LampDemo component mounted on #about-page-lamp-hero-root.");
-} else {
-  console.warn('React root element #about-page-lamp-hero-root not found. LampDemo will not render.');
-}
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById('about-page-lamp-hero-root');
+  if (container) {
+    ReactDOM.createRoot(container).render(
+      <React.StrictMode>
+        {/* Suspense is required when using lazy-loaded components.
+            The 'fallback' prop defines what React should render while the component's code is loading. */}
+        <Suspense fallback={<div>Loading About Me section...</div>}>
+          <LazyAboutUsComponent />
+        </Suspense>
+      </React.StrictMode>,
+    );
+  }
+});

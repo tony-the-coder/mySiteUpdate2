@@ -1,15 +1,20 @@
 // reactland/src/contactPageEntry.tsx
-import React from 'react';
+import React, { lazy, Suspense } from 'react'; // Import lazy and Suspense
 import ReactDOM from 'react-dom/client';
-import ContactUs from './pages/contact_us/ContactUs';
-import './index.css';
+import './index.css'; // Assuming common CSS
 
-const container = document.getElementById('react-contact-page-root');
-if (container) {
-  const root = ReactDOM.createRoot(container);
-  root.render(
-    <React.StrictMode>
-      <ContactUs />
-    </React.StrictMode>
-  );
-}
+// Dynamically import the main ContactUs component
+const LazyContactUs = lazy(() => import('./pages/contact_us/ContactUs'));
+
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById('contact-us-page-root'); // Verify this ID in your contact_us.html
+  if (container) {
+    ReactDOM.createRoot(container).render(
+      <React.StrictMode>
+        <Suspense fallback={<div>Loading Contact Form...</div>}>
+          <LazyContactUs />
+        </Suspense>
+      </React.StrictMode>,
+    );
+  }
+});

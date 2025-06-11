@@ -7,7 +7,10 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.urls import reverse_lazy, reverse
 from django.conf import settings
 from django.views.decorators.http import require_POST
-from django.http import JsonResponse, Http404 # For staff functions
+from django.http import JsonResponse, Http404
+
+from django.utils import timezone # ADDED: Import timezone
+import json # ADDED: Import json module
 
 from .models import (
     PortfolioCategory,
@@ -16,9 +19,9 @@ from .models import (
     BlogCategory,
     BlogPost,
     ContactInquiry,
-    Certificate, # Removed 'Project' from import
+    Certificate,
 )
-from .forms import ContactForm, PortfolioProjectForm, PortfolioImageForm, BlogPostForm # Ensure all forms are imported
+from .forms import ContactForm, PortfolioProjectForm, PortfolioImageForm, BlogPostForm
 
 
 # --- Helper functions for access control (similar to your existing auth_extras)
@@ -41,13 +44,6 @@ def home_view(request):
 
 
 def about_us_view(request):
-    # This view will now implicitly rely on the React component fetching data via API
-    # You might eventually pass some initial data here if needed, but for certificates, the API is primary.
-    # breadcrumbs = [
-    #     {'name': 'Home', 'url': reverse('portfolio_app:home')},
-    #     {'name': 'About Us', 'url': reverse('portfolio_app:about_us')},
-    # ]
-    # context = {'breadcrumbs': breadcrumbs}
     context = {}
     return render(request, 'portfolio_app/about_us.html', context)
 
@@ -57,8 +53,6 @@ def services_view(request):
 
 
 def portfolio_list_view(request):
-    # This view now serves the React-powered portfolio showcase page
-    # It passes initial project data via a script tag for the React app to consume.
     projects = PortfolioProject.objects.filter(is_active=True).order_by('order', '-created_at')
 
     # Format project data for JavaScript consumption
@@ -69,11 +63,11 @@ def portfolio_list_view(request):
             'title': project.title,
             'description': project.short_description,
             'link': project.get_absolute_url(),
-            'imageUrl': project.get_first_image_url() if project.get_first_image_url() else '' # Pass image URL
+            'imageUrl': project.get_first_image_url() if project.get_first_image_url() else ''
         })
 
     context = {
-        'projects_json': json.dumps(projects_data) # Make sure to import json
+        'projects_json': json.dumps(projects_data)
     }
     return render(request, 'portfolio_app/portfolio_showcase_react.html', context)
 
@@ -95,9 +89,8 @@ def portfolio_projects_by_category_view(request, category_slug):
     category = get_object_or_404(PortfolioCategory, slug=category_slug, is_active=True)
     projects = category.portfolio_projects.filter(is_active=True).order_by('order', '-created_at')
 
-    # Pagination logic (optional for category view, depending on number of projects)
     page = request.GET.get('page', 1)
-    paginator = Paginator(projects, 9) # Show 9 projects per page
+    paginator = Paginator(projects, 9)
     try:
         paginated_projects = paginator.page(page)
     except PageNotAnInteger:
@@ -117,7 +110,7 @@ def blog_list_view(request):
     categories = BlogCategory.objects.filter(is_active=True).order_by('name')
 
     page = request.GET.get('page', 1)
-    paginator = Paginator(posts, 5) # Show 5 blog posts per page
+    paginator = Paginator(posts, 5)
     try:
         paginated_posts = paginator.page(page)
     except PageNotAnInteger:
@@ -180,7 +173,6 @@ def contact_us_view(request):
 @login_required
 @user_passes_test(is_staff_member)
 def staff_dashboard_view(request):
-    # Example data for dashboard
     total_inquiries = ContactInquiry.objects.count()
     new_inquiries = ContactInquiry.objects.filter(status='NEW').count()
     total_projects = PortfolioProject.objects.count()
@@ -195,6 +187,7 @@ def staff_dashboard_view(request):
         'draft_blog_posts': draft_blog_posts,
     }
     return render(request, 'portfolio_app/staff/dashboard.html', context)
+
 
 @login_required
 @user_passes_test(is_staff_member)
