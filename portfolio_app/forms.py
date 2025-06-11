@@ -21,7 +21,6 @@ class ContactForm(forms.ModelForm):
 
 
 class PortfolioProjectForm(forms.ModelForm):
-    # Use CKEditor5Widget for the 'details' field for rich text editing
     details = forms.CharField(widget=CKEditor5Widget(config_name='default'))
 
     class Meta:
@@ -29,7 +28,7 @@ class PortfolioProjectForm(forms.ModelForm):
         fields = [
             'title', 'slug', 'categories', 'featured_image', 'short_description',
             'details', 'technologies_used', 'github_url', 'live_demo_url',
-            'order', 'status', 'year_completed', 'is_active'
+            'order', 'status', 'year_completed',  # REMOVED: 'is_active'
         ]
         widgets = {
             'categories': forms.CheckboxSelectMultiple(attrs={'class': 'form-checkbox-multiple'}),
@@ -40,7 +39,6 @@ class PortfolioProjectForm(forms.ModelForm):
                 attrs={'class': 'form-input', 'placeholder': 'https://github.com/your-project'}),
             'live_demo_url': forms.URLInput(attrs={'class': 'form-input', 'placeholder': 'https://live-demo.com'}),
             'year_completed': forms.NumberInput(attrs={'class': 'form-input', 'placeholder': 'YYYY'}),
-            # Add other widgets for styling if desired
         }
         help_texts = {
             'slug': 'Leave blank to auto-generate from title. Must be unique.',
@@ -58,7 +56,6 @@ class PortfolioImageForm(forms.ModelForm):
 
 
 class BlogPostForm(forms.ModelForm):
-    # Use CKEditor5Widget for the 'content' field for rich text editing
     content = forms.CharField(widget=CKEditor5Widget(config_name='default'))
 
     class Meta:
@@ -70,7 +67,6 @@ class BlogPostForm(forms.ModelForm):
         widgets = {
             'excerpt': forms.Textarea(attrs={'rows': 3, 'class': 'form-textarea'}),
             'published_date': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-input'}),
-            # Add other widgets for styling if desired
         }
         help_texts = {
             'slug': 'Leave blank to auto-generate from title. Must be unique.',
