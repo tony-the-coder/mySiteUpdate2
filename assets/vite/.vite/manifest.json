@@ -51,6 +51,10 @@
       "_proxy.js"
     ]
   },
+  "src/assets/img/ttc-logo.png": {
+    "file": "assets/ttc-logo.png",
+    "src": "src/assets/img/ttc-logo.png"
+  },
   "src/certificatesEntry.tsx": {
     "file": "assets/certificatesEntry.js",
     "name": "certificatesEntry",
@@ -115,6 +119,9 @@
       "_utils.js",
       "_use-scroll.js",
       "_proxy.js"
+    ],
+    "assets": [
+      "assets/ttc-logo.png"
     ]
   },
   "src/portfolioPageEntry.tsx": {
