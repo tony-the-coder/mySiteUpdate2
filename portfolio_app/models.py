@@ -268,8 +268,6 @@ class Certificate(models.Model):
     credential_url = models.URLField(max_length=200, blank=True, null=True)
     image = models.ImageField(upload_to='certificates/', blank=True, null=True) # If you want to store images
     order = models.IntegerField(default=0, help_text="Order in which certificates are displayed")
-    # Added is_active to allow filtering in API and admin
-    is_active = models.BooleanField(default=True, db_index=True, help_text="Controls if this certificate is visible on the public site.")
 
     class Meta:
         ordering = ['order', 'issue_date', 'title']
