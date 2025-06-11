@@ -13,6 +13,7 @@ import {
   NavbarLogo,
 } from "@/components/ui/resizable-navbar";
 
+
 export const CustomNavbar = () => {
   const navItems = [
     { name: "Home", link: "/" },
