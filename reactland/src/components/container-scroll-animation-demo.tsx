@@ -1,21 +1,24 @@
-// reactland/src/components/container-scroll-animation-demo.tsx
 "use client";
-// import React from "react"; // REMOVED: Not needed with new JSX transform
+
 import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 
-// Define props for HeroScrollDemo
-interface HeroScrollDemoProps {
-  titleComponent: React.ReactNode;
-  imageSrc: string;
-}
-
-// Ensure 'export default' is present here
-export default function HeroScrollDemo({ titleComponent, imageSrc }: HeroScrollDemoProps) {
+export default function HeroScrollDemo() {
   return (
     <div className="flex flex-col overflow-hidden">
-      <ContainerScroll titleComponent={titleComponent}>
+      <ContainerScroll
+        titleComponent={
+          <>
+            <h1 className="text-4xl font-semibold text-black dark:text-white">
+              Unleash the power of <br />
+              <span className="text-4xl md:text-[6rem] font-bold mt-1 leading-none">
+                Scroll Animations
+              </span>
+            </h1>
+          </>
+        }
+      >
         <img
-          src={imageSrc} // Use prop
+          src={`/linear.webp`}
           alt="hero"
           height={720}
           width={1400}
