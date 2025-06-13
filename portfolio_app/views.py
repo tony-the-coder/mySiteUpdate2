@@ -10,7 +10,12 @@ from django.views.decorators.http import require_POST
 from django.http import JsonResponse, Http404
 
 from django.utils import timezone
-import json
+# REMOVE THIS: import json # No longer needed for json.dumps here
+
+# If you need DjangoJSONEncoder for complex types (like Date/Time objects)
+# you can import it here, but it's typically used with json.dumps manually
+from django.core.serializers.json import DjangoJSONEncoder
+
 
 from .models import (
     PortfolioCategory,
@@ -70,7 +75,7 @@ def portfolio_list_view(request):
         })
 
     context = {
-        'projects_json': json.dumps(projects_data)
+        'projects_json': projects_data # CHANGE: Pass the Python list directly
     }
     return render(request, 'portfolio_app/portfolio_showcase_react.html', context)
 
