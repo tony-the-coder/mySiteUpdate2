@@ -1,5 +1,5 @@
 // reactland/src/portfolioPageEntry.tsx
-import React, { lazy, Suspense } from 'react'; // Import lazy and Suspense
+import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 
@@ -10,7 +10,8 @@ const LazyPortfolioShowcasePage = lazy(() =>
 );
 
 document.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('portfolio-showcase-root'); // Verify this ID in your portfolio_showcase_react.html
+  // CORRECTED ID: This MUST match the ID from portfolio_showcase_react.html
+  const container = document.getElementById('react-portfolio-showcase-root');
   if (container) {
     // You might also need to pass projects_json data if the lazy-loaded component still relies on it
     // For now, assuming the component fetches its own data or handles data loading internally.
@@ -21,5 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
         </Suspense>
       </React.StrictMode>,
     );
+  } else {
+      // Added a console error for easier debugging if the root element isn't found
+      console.error('React portfolio root element not found! Check ID in template and JS entry file.');
   }
 });
