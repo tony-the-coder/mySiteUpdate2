@@ -1,23 +1,8 @@
+{# templates/portfolio_app/contact_us.html #}
 {% extends "base.html" %}
 {% load django_vite %}
-{# Removed load static i18n as they are not explicitly used in this simplified version #}
 
-{% block title %}Contact Me - Tony the Coder{% endblock title %}
-
-{% block meta_description %}
-    Get in touch with Tony the Coder to discuss your web development projects, AI ideas, or collaboration opportunities.
-{% endblock meta_description %}
-
-{# REMOVED hero_section block entirely as React component will handle it #}
-
-{% block body_class %}bg-brand-charcoal-darker{% endblock %}
-
-{##}
-{#{% block breadcrumbs_block %}#}
-{#    {% if breadcrumbs %}#}
-{#        {% include 'partials/_breadcrumbs.html' with breadcrumbs=breadcrumbs %}#}
-{#    {% endif %}#}
-{#{% endblock breadcrumbs_block %}#}
+{% block title %}Contact Us{% endblock title %}
 
 {% block content %}
 <div id="react-contact-form-root">
@@ -28,5 +13,5 @@
 {% block extra_js %}
     {{ block.super }}
     {% vite_react_refresh %}
-    {% vite_asset 'main.tsx' %} {# Ensure main.tsx is set up to render ContactUs into react-contact-form-root #}
+    {% vite_asset 'src/contactPageEntry.tsx' %} {# CHANGE THIS LINE FROM 'main.tsx' #}
 {% endblock extra_js %}
